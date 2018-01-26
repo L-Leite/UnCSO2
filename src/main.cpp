@@ -20,11 +20,23 @@ bool CreateDebugConsole()
 	return true;
 }
 
-int main(int argc, char *argv[])
+int main( int argc, char *argv[] )
 {
-	CreateDebugConsole();
+#ifndef _DEBUG
+	bool bCreateConsole = false;
+
+	for ( int i = 0; i < argc; i++ )
+	{ 
+		if ( !strcmp( argv[i], "-dbgconsole" ) )
+			bCreateConsole = true;
+	}
+	
+	if ( bCreateConsole )
+#endif
+		CreateDebugConsole();
+
 	DBG_PRINTF( "Console created\n" );
 
-	CUnCSO2App app( argc, argv );	  	 
+	CUnCSO2App app( argc, argv );
 	return app.exec();
 }
