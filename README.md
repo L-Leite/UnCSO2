@@ -31,6 +31,7 @@ If built successfully, you will find your binary inside the *bin* directory.
 
 ## Credits
 
+- Ekey for [reversing the unpacking algorithm](http://forum.xentax.com/viewtopic.php?f=21&t=11117)
 - weidai11 for [Crypto++](https://www.cryptopp.com/)
 - The Qt Company for [Qt](https://www.qt.io/)
 - George Anescu for his [CRijndael](https://www.codeproject.com/Articles/1380/A-C-Implementation-of-the-Rijndael-Encryption-Decr) class
