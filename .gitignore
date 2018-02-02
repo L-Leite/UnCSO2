@@ -393,3 +393,6 @@ CMakeLists.txt.user*
 *.exe
 *.out
 *.app
+
+# Git version header
+src/gitversion.h

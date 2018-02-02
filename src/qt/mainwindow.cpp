@@ -13,14 +13,17 @@
 CMainWindow::CMainWindow( QWidget* pParent )
 	: QMainWindow( pParent )
 {
+	setWindowTitle( "UnCSO2 Commit " + GetCurrentCommit() );
+
 	ui.setupUi( this );
-
-	m_pPkgItemModel = new CPkgFileSystemModel( this );
-
 	ui.unpackButton->setDisabled( true );
+
+	m_pPkgItemModel = new CPkgFileSystemModel( this );			
 
 	connect( ui.actionOpen_folder, SIGNAL( triggered() ), this, SLOT( OnFileOpen() ) );
 	connect( ui.actionExit, SIGNAL( triggered() ), this, SLOT( OnExit() ) );	
+	connect( ui.actionDecrypt_encrypted_files, SIGNAL( toggled( bool ) ), this, SLOT( OnDecryptToggle( bool ) ) );
+	connect( ui.actionRename_encrypted_files, SIGNAL( toggled( bool ) ), this, SLOT( OnRenameToggle( bool ) ) );
 	connect( ui.unpackButton, SIGNAL( released() ), this, SLOT( OnUnpackClick() ) );
 	connect( ui.actionAbout, SIGNAL( triggered() ), this, SLOT( OnAbout() ) );
 	connect( ui.actionAboutQt, &QAction::triggered, this, &QApplication::aboutQt );
@@ -92,9 +95,21 @@ void CMainWindow::OnExit()
 	std::exit( 0 );
 }
 
+void CMainWindow::OnDecryptToggle( bool bChecked )
+{
+	DBG_PRINTF( "toggled\n" );
+	m_pPkgItemModel->SetDecryptEncFiles( bChecked );
+}
+
+void CMainWindow::OnRenameToggle( bool bChecked )
+{
+	DBG_PRINTF( "toggled\n" );
+	m_pPkgItemModel->SetRenameEncFiles( bChecked );
+}
+
 void CMainWindow::OnUnpackClick()
 {
-	DBG_PRINTF( " triggered\n" );
+	DBG_PRINTF( "triggered\n" );
 	g_OutPath = QFileDialog::getExistingDirectory( this, "Select the output directory", g_PkgDataPath.string().c_str() ).toStdString();
 
 	if ( !g_OutPath.empty() )

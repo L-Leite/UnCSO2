@@ -11,6 +11,9 @@
 #include <QMessageBox>
 #include <QProgressDialog>
 
+#include <CryptoPP/md5.h>
+
+#include "decryption.h"
 #include "mainwindow.h"
 #include "pkgfilesystem.h"   
 #include "pkgfilesystemnode.h"
@@ -31,6 +34,8 @@ CPkgFileSystemModel::CPkgFileSystemModel( CMainWindow* pParent /*= Q_NULLPTR*/ )
 	m_bForceSort = true;
 	m_bGenerated = false;
 	m_pRoot = new CPkgFileSystemNode();
+	m_bShouldDecryptEncFiles = true;
+	m_bShouldRenameEncFiles = false;
 }
 
 CPkgFileSystemModel::~CPkgFileSystemModel()
@@ -464,13 +469,68 @@ void CPkgFileSystemModel::UpdateNodeChildren( const QModelIndex &modelIndex, con
 		setData( index( i, 0, modelIndex ), value, Qt::CheckStateRole );
 }
 
+bool CPkgFileSystemModel::IsFileContentEncrypted( uint8_t* pFileBuffer, uint32_t iBufferSize )
+{
+	CSO2EncFileHeader_t* pFile = (CSO2EncFileHeader_t*) pFileBuffer;	  	
+
+	if ( !pFile || pFile->iVersion != CSO2_ENCRYPTED_FILE_VER )
+		return false;
+
+	if ( pFile->iEncryption < PKGCIPHER_DES || pFile->iEncryption > PKGCIPHER_RIJNDAEL )
+		return false;
+
+	if ( pFile->iFileSize < 0 || pFile->iFileSize > iBufferSize )
+		return false;
+
+	return true;
+}
+
+bool CPkgFileSystemModel::DecryptEncFile( std::filesystem::path& szFilePath, uint8_t*& pBuffer, uint32_t& iBufferSize )
+{	
+	if ( !pBuffer )
+		return false;
+
+	if ( !iBufferSize )
+	{
+		DBG_PRINTF( "iBufferSize is null, pretending it's fine\n" );
+		return true;
+	}
+
+	CSO2EncFileHeader_t* pHeader = (CSO2EncFileHeader_t*) pBuffer;
+	pBuffer += sizeof( CSO2EncFileHeader_t );
+	iBufferSize = pHeader->iFileSize;
+
+	uint8_t digestedKey[CryptoPP::Weak::MD5::DIGESTSIZE];	   
+
+	if ( !GeneratePkgListKey( pHeader->iFlag, szFilePath.filename().string().c_str(), digestedKey ) )
+	{				
+		DBG_PRINTF( "GeneratePkgListKey failed! Filename: %s Flag: %i\n", szFilePath.filename().string().c_str(), pHeader->iFlag );
+		return false;
+	}
+
+	if ( !DecryptBuffer( pHeader->iEncryption, pBuffer, pHeader->iFileSize, digestedKey, sizeof( digestedKey ) ) )
+	{
+		DBG_PRINTF( "DecryptBuffer failed! Filename: %s Encryption: %s Filesize: %u (0x%X)\n", szFilePath.filename().string().c_str(), PkgCipherToString( pHeader->iFlag ), pHeader->iFileSize, pHeader->iFileSize );
+		return false;
+	}
+
+	if ( ShouldRenameEncFiles() )
+	{
+		std::string szFileExtension = szFilePath.extension().string();
+		szFileExtension.erase( szFileExtension.find( 'e' ), 1 );
+		szFilePath.replace_extension( szFileExtension );
+	}
+
+	return true;
+}
+
 bool CPkgFileSystemModel::ExtractCheckedNodes()
 {
 	if ( m_CheckedIndexes.isEmpty() )
 	{
-		DBG_PRINTF( "Please select an item...\n" );
+		DBG_PRINTF( "m_CheckedIndexes is empty!\n" );
 		STATUS_BAR_PRINT( "m_CheckedIndexes is empty!" );
-		QMessageBox msgBox( "Error", "m_CheckedIndexes is empty!", QMessageBox::Warning, QMessageBox::Ok, QMessageBox::NoButton, QMessageBox::NoButton );
+		QMessageBox msgBox( "Error", "Please select an item...", QMessageBox::Warning, QMessageBox::Ok, QMessageBox::NoButton, QMessageBox::NoButton );
 		msgBox.exec();
 		return false;
 	}
@@ -523,6 +583,8 @@ bool CPkgFileSystemModel::ExtractCheckedNodes()
 				return;
 			}
 
+			uint8_t* pRealBuffer = pBuffer;
+
 			std::filesystem::path targetFile = g_OutPath;
 			targetFile += pNode->GetFilePath();
 
@@ -535,9 +597,20 @@ bool CPkgFileSystemModel::ExtractCheckedNodes()
 			if ( errorCode )
 			{
 				DBG_WPRINTF( L"Couldn't create directory \"%s\"! Error: %S\n", targetPath.c_str(), errorCode.message().c_str() );
-				delete[] pBuffer;
+				delete[] pRealBuffer;
 				iThreadReturnCode.store( 1, std::memory_order_relaxed );
 				return;
+			}
+
+			if ( ShouldDecryptEncFiles() && IsFileContentEncrypted( pBuffer, iBufferSize ) )
+			{
+				if ( !DecryptEncFile( targetFile, pBuffer, iBufferSize ) )
+				{
+					DBG_WPRINTF( L"Couldn't decrypt \"%s\"!\n", targetFile.c_str() );
+					delete[] pRealBuffer;
+					iThreadReturnCode.store( 1, std::memory_order_relaxed );
+					return;
+				}
 			}
 
 			HANDLE hTargetFile = CreateFileW( targetFile.c_str(), GENERIC_WRITE, NULL, Q_NULLPTR, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, Q_NULLPTR );
@@ -545,7 +618,7 @@ bool CPkgFileSystemModel::ExtractCheckedNodes()
 			if ( hTargetFile == INVALID_HANDLE_VALUE )
 			{
 				DBG_WPRINTF( L"Couldn't create file %s!\n", targetFile.c_str() );
-				delete[] pBuffer;
+				delete[] pRealBuffer;
 				iThreadReturnCode.store( 1, std::memory_order_relaxed );
 				return;
 			}
@@ -556,13 +629,13 @@ bool CPkgFileSystemModel::ExtractCheckedNodes()
 			if ( !bResult || dwBytesWritten != iBufferSize )
 			{
 				DBG_WPRINTF( L"Couldn't write file %s! Result: %s Bytes written: 0x%X (%i)\n", targetFile.c_str(), bResult ? L"TRUE" : L"FALSE", dwBytesWritten, dwBytesWritten );	  				
-				delete[] pBuffer;
+				delete[] pRealBuffer;
 				CloseHandle( hTargetFile );
 				iThreadReturnCode.store( 1, std::memory_order_relaxed );
 				return;
 			}
 
-			delete[] pBuffer;
+			delete[] pRealBuffer;
 			CloseHandle( hTargetFile );					
 		}
 	} );

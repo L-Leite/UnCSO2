@@ -13,63 +13,6 @@
 std::vector<std::string> g_vPkgFilenames;
 std::string g_szPkgListFilename = CSO2_CHN_PKGLISTFILENAME;
 
-static uint8_t s_PackageListKey[4][16] =
-{
-	{ 0x9A, 0xA6, 0xC7, 0x59, 0x18, 0xEA, 0xD0, 0x44, 0x83, 0xA3, 0x3A, 0x3E, 0xCE, 0xAF, 0x6F, 0x68 },
-	{ 0xB6, 0xBA, 0x15, 0xC7, 0x77, 0x9D, 0x9C, 0x49, 0x84, 0x62, 0x2A, 0x9A, 0x8A, 0x61, 0x84, 0xA6 },
-	{ 0x68, 0x55, 0x24, 0x24, 0x2B, 0xCB, 0x88, 0x4B, 0xA7, 0xA6, 0xD2, 0xC7, 0x94, 0xED, 0xE8, 0xD3 },
-	{ 0x36, 0x24, 0xD6, 0x8C, 0x6C, 0xB8, 0xE1, 0x4A, 0xB1, 0x82, 0xC0, 0xA3, 0xDC, 0xE4, 0x16, 0xC8 }
-};
-
-static const char* PkgCipherToString( int iCipher )
-{	
-	switch ( iCipher )
-	{
-		case PKGCIPHER_DES:
-			return "PKGCIPHER_DES";
-
-		case PKGCIPHER_AES:
-			return "PKGCIPHER_AES";
-
-		case PKGCIPHER_BLOWFISH:
-			return "PKGCIPHER_BLOWFISH";
-
-		default:
-			return "UNKNOWN";
-	}
-}
-
-bool GeneratePkgListKey( int iKey, const char* szPackageIndexName, uint8_t* pOutKey )
-{		  
-	CryptoPP::Weak::MD5 md5;
-
-	uint32_t iStartData = 2;
-
-	md5.Update( (uint8_t*) &iStartData, sizeof( iStartData ) );
-
-	if ( iKey % 2 )
-	{
-		md5.Update( s_PackageListKey[iKey / 2], 16 );
-
-		size_t iStrLength = strlen( szPackageIndexName );
-
-		if ( iStrLength )
-			md5.Update( (uint8_t*) szPackageIndexName, iStrLength );
-	}
-	else
-	{
-		size_t iStrLength = strlen( szPackageIndexName );
-
-		if ( iStrLength )
-			md5.Update( (uint8_t*) szPackageIndexName, iStrLength );
-
-		md5.Update( s_PackageListKey[iKey / 2], 16 );
-	}
-
-	md5.Final( pOutKey );
-	return true;
-}
-
 void FillPkgArrayFromBuffer( std::vector<std::string>& vOutPkgFIleNames, uint8_t* pFileBuffer )
 {	
 	static const char* szNewLine = "\r\n";
@@ -102,12 +45,12 @@ bool GetPkgFileNames( const std::filesystem::path& pkgDirectoryPath, std::vector
 		return false;
 	}
 
-	PkgListHeader_t pkgListHeader;	 
+	CSO2PkgListHeader_t pkgListHeader;	 
 
 	DWORD dwBytesRead = NULL;
-	BOOL bResult = ReadFile( hFile, &pkgListHeader, sizeof( PkgListHeader_t ), &dwBytesRead, nullptr );
+	BOOL bResult = ReadFile( hFile, &pkgListHeader, sizeof( CSO2PkgListHeader_t ), &dwBytesRead, nullptr );
 
-	if ( !bResult || dwBytesRead != sizeof( PkgListHeader_t ) )
+	if ( !bResult || dwBytesRead != sizeof( CSO2PkgListHeader_t ) )
 	{
 		printf( "GetPkgFileNames: Failed to read PkgListHeader! Last error: %i Bytes read: %u\n", GetLastError(), dwBytesRead );
 		CloseHandle( hFile );

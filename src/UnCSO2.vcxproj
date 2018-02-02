@@ -70,17 +70,19 @@
       <AdditionalDependencies>cryptlib.lib;qtmaind.lib;Qt5Cored.lib;Qt5Guid.lib;Qt5Widgetsd.lib;Qt5WinExtrasd.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
-      <Command>
-      </Command>
+      <Command>powershell $(SolutionDir)setupcryptopp_win.ps1
+cd $(SolutionDir)
+cmd /c "$(SolutionDir)git-version-gen.cmd"</Command>
     </PreBuildEvent>
     <CustomBuildStep>
-      <Command>cd $(SolutionDir)
-powershell setupcryptopp_win.ps1</Command>
+      <Command>
+      </Command>
       <Inputs>
       </Inputs>
       <TreatOutputAsContent>
       </TreatOutputAsContent>
-      <Message>Fixing cryptopp... (using this breaks Qt files generation)</Message>
+      <Message>
+      </Message>
     </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -103,18 +105,26 @@ powershell setupcryptopp_win.ps1</Command>
       <AdditionalDependencies>cryptlib.lib;qtmain.lib;Qt5Core.lib;Qt5Gui.lib;Qt5Widgets.lib;Qt5WinExtras.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
-      <Command>
-      </Command>
+      <Command>powershell $(SolutionDir)setupcryptopp_win.ps1
+cd $(SolutionDir)
+cmd /c $(SolutionDir)git-version-gen.cmd</Command>
     </PreBuildEvent>
     <CustomBuildStep>
-      <Command>cd $(SolutionDir)
-powershell setupcryptopp_win.ps1</Command>
-      <Message>Fixing cryptopp... (using this breaks Qt files generation)</Message>
+      <Command>
+      </Command>
+      <Message>
+      </Message>
     </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="qt\GeneratedFiles\Debug\moc_mainwindow.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="qt\GeneratedFiles\Debug\moc_uncso2app.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="qt\GeneratedFiles\Release\moc_mainwindow.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="qt\GeneratedFiles\Release\moc_uncso2app.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
@@ -122,9 +132,6 @@ powershell setupcryptopp_win.ps1</Command>
     <ClCompile Include="uncso2app.cpp" />
     <ClCompile Include="qt\aboutdialog.cpp" />
     <ClCompile Include="qt\GeneratedFiles\Debug\moc_aboutdialog.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="qt\GeneratedFiles\Debug\moc_mainwindow.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="qt\GeneratedFiles\Debug\moc_pkgfilesystemmodel.cpp">
@@ -139,9 +146,6 @@ powershell setupcryptopp_win.ps1</Command>
     <ClCompile Include="qt\GeneratedFiles\Release\moc_aboutdialog.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="qt\GeneratedFiles\Release\moc_mainwindow.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </ClCompile>
     <ClCompile Include="qt\GeneratedFiles\Release\moc_pkgfilesystemmodel.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
@@ -153,6 +157,7 @@ powershell setupcryptopp_win.ps1</Command>
     <ClCompile Include="qt\pkgfilesystemnode.cpp" />
     <ClCompile Include="Rijndael.cpp" />
     <ClCompile Include="qt\pkgfilesystemmodel.cpp" />
+    <ClCompile Include="version.cpp" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="qt\mainwindow.h">
@@ -179,6 +184,7 @@ powershell setupcryptopp_win.ps1</Command>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="version.h" />
     <CustomBuild Include="uncso2app.h">
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QTDIR)\bin\moc.exe;%(FullPath);$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Moc%27ing uncso2app.h...</Message>

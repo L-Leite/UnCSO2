@@ -18,6 +18,8 @@ public:
 private slots:
 	void OnFileOpen();
 	void OnExit();
+	void OnDecryptToggle( bool bChecked );
+	void OnRenameToggle( bool bChecked );
 	void OnUnpackClick();
 	void OnAbout();
 

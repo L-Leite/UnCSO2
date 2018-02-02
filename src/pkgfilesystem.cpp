@@ -108,9 +108,6 @@ bool LoadPkgEntries( const std::string& szPkgFilename, CPkgFileSystemModel* pFil
 		std::string szFilePath = fileEntryHeader.szFilePath;
 		ConvertPathToUnix( szFilePath );
 
-		if ( fileEntryHeader.iUnpackedSize != fileEntryHeader.iPackedSize )
-			printf( "" );
-
 		CCSO2PkgEntry* pPkgEntry = new CCSO2PkgEntry( szPkgFilename, szFilePath, dwFileStart + fileEntryHeader.iOffset, fileEntryHeader.iPackedSize, fileEntryHeader.iUnpackedSize, fileEntryHeader.bIsEncrypted );
 		pFileSystemModel->CreateChild( pPkgEntry );
 	}
@@ -119,14 +116,14 @@ bool LoadPkgEntries( const std::string& szPkgFilename, CPkgFileSystemModel* pFil
 	return true;
 }
 
-CCSO2PkgEntry::CCSO2PkgEntry( const std::string& szPkgFilename, const std::string& szEntryPath, uint32_t iFileOffset, uint32_t iPackedSize, uint32_t iUnpackedSize, bool bIsEncrypted )
+CCSO2PkgEntry::CCSO2PkgEntry( const std::string& szPkgFilename, const std::string& szEntryPath, uint32_t iFileOffset, uint32_t iPackedSize, uint32_t iUnpackedSize, bool bIsEntryEncrypted )
 {
 	m_szPkgFilename = szPkgFilename;
 	m_szEntryPath = szEntryPath;
 	m_iFileOffset = iFileOffset;
 	m_iPackedSize = iPackedSize;
 	m_iUnpackedSize = iUnpackedSize;
-	m_bIsEncrypted = bIsEncrypted;
+	m_bIsEntryEncrypted = bIsEntryEncrypted;
 }
 
 CCSO2PkgEntry::~CCSO2PkgEntry()
@@ -175,7 +172,7 @@ bool CCSO2PkgEntry::ReadPkgEntry( uint8_t** pOutBuffer, uint32_t* pOutSize /*= n
 
 	std::filesystem::path filePath = m_szEntryPath;
 
-	if ( m_bIsEncrypted )
+	if ( m_bIsEntryEncrypted )
 		MakePkgKeyMd5( filePath.filename().string().c_str(), s_szPackageEntryKey, szGeneratedKey );
 
 	assert( m_iPackedSize >= m_iUnpackedSize );	// Packed size should always be bigger than unpacked
@@ -199,7 +196,7 @@ bool CCSO2PkgEntry::ReadPkgEntry( uint8_t** pOutBuffer, uint32_t* pOutSize /*= n
 			return false;
 		}
 
-		if ( m_bIsEncrypted )
+		if ( m_bIsEntryEncrypted )
 			DecryptBuffer( PKGCIPHER_RIJNDAEL, pBuffer + i, m_iPackedSize - i, (uint8_t*) szGeneratedKey.c_str(), szGeneratedKey.length() );
 	}
 

@@ -5,6 +5,8 @@
 #define CSO2_PKGHEADER_SIZE 272
 #define CSO2_PKGENTRYHEADER_SIZE 288
 
+#define CSO2_ENCRYPTED_FILE_VER 2
+
 #pragma pack(push, 1)
 
 typedef struct CSO2PkgHeader_s
@@ -30,6 +32,15 @@ typedef struct CSO2PkgFileEntryHeader_s
 
 static_assert(sizeof( CSO2PkgFileEntryHeader_t ) == CSO2_PKGENTRYHEADER_SIZE, "CSO2PkgFileEntryHeader_t size is different from CSO2_PKGENTRYHEADER_SIZE!");
 
+typedef struct CSO2EncFileHeader_s
+{
+	char szChecksum[10];
+	uint16_t iVersion;
+	uint8_t iEncryption;
+	uint8_t iFlag;
+	uint32_t iFileSize;
+} CSO2EncFileHeader_t;
+
 #pragma pack(pop)
 
 class CPkgFileSystemModel;
@@ -37,7 +48,7 @@ class CPkgFileSystemModel;
 class CCSO2PkgEntry
 {
 public:	  	
-	CCSO2PkgEntry( const std::string& szPkgFilename, const std::string& szEntryPath, uint32_t iFileOffset, uint32_t iPackedSize, uint32_t iUnpackedSize, bool bIsEncrypted );
+	CCSO2PkgEntry( const std::string& szPkgFilename, const std::string& szEntryPath, uint32_t iFileOffset, uint32_t iPackedSize, uint32_t iUnpackedSize, bool bIsEntryEncrypted );
 	~CCSO2PkgEntry();
 
 	bool ReadPkgEntry( uint8_t** pOutBuffer, uint32_t* pOutSize = nullptr );
@@ -54,7 +65,7 @@ private:
 	uint32_t m_iFileOffset;
 	uint32_t m_iPackedSize;
 	uint32_t m_iUnpackedSize;
-	bool m_bIsEncrypted;
+	bool m_bIsEntryEncrypted;
 
 private:
 	CCSO2PkgEntry() = delete;

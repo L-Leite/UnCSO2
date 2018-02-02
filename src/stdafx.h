@@ -14,5 +14,7 @@
 #include <vector>
 #include "vc17_filesystem.h"
 
+#include "version.h"
+
 extern std::filesystem::path g_PkgDataPath;
 extern std::filesystem::path g_OutPath;

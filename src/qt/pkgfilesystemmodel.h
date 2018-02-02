@@ -46,7 +46,11 @@ public:
 	void CreateChild( CCSO2PkgEntry* pPkgEntry );
 	bool ExtractCheckedNodes();		
 
-	inline bool WasGenerated() { return m_bGenerated; }
+	inline bool WasGenerated() { return m_bGenerated; }		
+	inline bool ShouldDecryptEncFiles() { return m_bShouldDecryptEncFiles; }
+	inline void SetDecryptEncFiles( bool bShouldDecryptEncFiles ) { m_bShouldDecryptEncFiles = bShouldDecryptEncFiles; }
+	inline bool ShouldRenameEncFiles() { return m_bShouldRenameEncFiles; }
+	inline void SetRenameEncFiles( bool bShouldRenameEncFiles ) { m_bShouldRenameEncFiles = bShouldRenameEncFiles; }
 
 	enum
 	{
@@ -59,6 +63,8 @@ public:
 
 private:	
 	void UpdateNodeChildren( const QModelIndex &index, const QVariant &value );
+	bool DecryptEncFile( std::filesystem::path& szFilePath, uint8_t*& pBuffer, uint32_t& iBufferSize );
+	bool IsFileContentEncrypted( uint8_t* pFileBuffer, uint32_t iBufferSize );
 
 	static QVector<CPkgFileSystemNode*> m_DirectoryNodes;
 
@@ -72,6 +78,8 @@ private:
 	bool m_bForceSort;
 
 	bool m_bGenerated;
+	bool m_bShouldDecryptEncFiles;
+	bool m_bShouldRenameEncFiles;
 };
 
 #endif // PKGFILESYSTEMMODEL_H
