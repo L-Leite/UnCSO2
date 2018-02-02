@@ -2,5 +2,5 @@
 
 QString GetCurrentCommit()
 {	
-	return GIT_BRANCH "-" GIT_VERSION;
+	return GIT_BRANCH "_" GIT_VERSION;
 }

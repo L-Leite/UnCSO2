@@ -31,5 +31,6 @@ If built successfully, you will find your binary inside the *bin* directory.
 - The Qt Company for [Qt](https://www.qt.io/)
 - George Anescu for his [CRijndael](https://www.codeproject.com/Articles/1380/A-C-Implementation-of-the-Rijndael-Encryption-Decr) class
 - [RPCS3](https://rpcs3.net/)'s team for some UI code and the Git version header generator script
+- [Valve Software](https://github.com/ValveSoftware/source-sdk-2013) and [Igor Parlov](http://www.7-zip.org/) for the lzmaDecoder
 
 For more information check the license specific file of each project

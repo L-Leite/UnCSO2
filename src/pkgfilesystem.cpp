@@ -130,23 +130,6 @@ CCSO2PkgEntry::~CCSO2PkgEntry()
 {
 }
 
-void sub_43A5D0( HANDLE hPkgHandle, uint32_t dwOffset, uint32_t dwBufferSize, uint8_t* lpBuffer, uint32_t* pBytesRead )
-{
-	if ( !hPkgHandle )
-		return;
-
-	DWORD dwBytesRead = 0;
-
-	if ( SetFilePointer( hPkgHandle, dwOffset, nullptr, NULL ) != INVALID_SET_FILE_POINTER
-		&& ReadFile( hPkgHandle, lpBuffer, dwBufferSize, &dwBytesRead, nullptr )
-		&& dwBufferSize - dwBytesRead <= 16 )
-	{
-		*pBytesRead = dwBytesRead;
-	}
-
-	 ReadFile( hPkgHandle, lpBuffer + dwBytesRead, dwBufferSize - dwBytesRead, &dwBytesRead, nullptr );
-}
-
 bool CCSO2PkgEntry::ReadPkgEntry( uint8_t** pOutBuffer, uint32_t* pOutSize /*= nullptr*/ )
 {
 	std::string szGeneratedKey;

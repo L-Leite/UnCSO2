@@ -13,10 +13,10 @@
 CMainWindow::CMainWindow( QWidget* pParent )
 	: QMainWindow( pParent )
 {
-	setWindowTitle( "UnCSO2 Commit " + GetCurrentCommit() );
-
 	ui.setupUi( this );
 	ui.unpackButton->setDisabled( true );
+
+	setWindowTitle( "UnCSO2 " + GetCurrentCommit() );
 
 	m_pPkgItemModel = new CPkgFileSystemModel( this );			
 
@@ -24,6 +24,7 @@ CMainWindow::CMainWindow( QWidget* pParent )
 	connect( ui.actionExit, SIGNAL( triggered() ), this, SLOT( OnExit() ) );	
 	connect( ui.actionDecrypt_encrypted_files, SIGNAL( toggled( bool ) ), this, SLOT( OnDecryptToggle( bool ) ) );
 	connect( ui.actionRename_encrypted_files, SIGNAL( toggled( bool ) ), this, SLOT( OnRenameToggle( bool ) ) );
+	connect( ui.actionDecompress_VTF_files, SIGNAL( toggled( bool ) ), this, SLOT( OnDecompressToggle( bool ) ) );
 	connect( ui.unpackButton, SIGNAL( released() ), this, SLOT( OnUnpackClick() ) );
 	connect( ui.actionAbout, SIGNAL( triggered() ), this, SLOT( OnAbout() ) );
 	connect( ui.actionAboutQt, &QAction::triggered, this, &QApplication::aboutQt );
@@ -105,6 +106,12 @@ void CMainWindow::OnRenameToggle( bool bChecked )
 {
 	DBG_PRINTF( "toggled\n" );
 	m_pPkgItemModel->SetRenameEncFiles( bChecked );
+}
+
+void CMainWindow::OnDecompressToggle( bool bChecked )
+{ 
+	DBG_PRINTF( "toggled\n" );
+	m_pPkgItemModel->SetDecompVtfFiles( bChecked );
 }
 
 void CMainWindow::OnUnpackClick()

@@ -131,7 +131,7 @@ bool DecryptBuffer( int iCipher, uint8_t* pInBuffer, uint8_t* pOutBuffer, size_t
 		if ( bUsingTempBuffer )
 		{	
 			memcpy_s( pInBuffer, iBufferSize, pOutBuffer, iBufferSize );	
-			delete pOutBuffer;
+			delete[] pOutBuffer;
 		}	  		
 	}
 	else

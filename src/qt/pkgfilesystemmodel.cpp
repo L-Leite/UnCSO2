@@ -13,6 +13,7 @@
 
 #include <CryptoPP/md5.h>
 
+#include "cso2vtf.h"
 #include "decryption.h"
 #include "mainwindow.h"
 #include "pkgfilesystem.h"   
@@ -36,6 +37,7 @@ CPkgFileSystemModel::CPkgFileSystemModel( CMainWindow* pParent /*= Q_NULLPTR*/ )
 	m_pRoot = new CPkgFileSystemNode();
 	m_bShouldDecryptEncFiles = true;
 	m_bShouldRenameEncFiles = false;
+	m_bShouldDecompVtfFiles = true;
 }
 
 CPkgFileSystemModel::~CPkgFileSystemModel()
@@ -426,6 +428,8 @@ bool CPkgFileSystemModel::GenerateFileSystem()
 
 void CPkgFileSystemModel::CleanFileSystem()
 {
+	m_DirectoryNodes.clear();
+
 	if ( m_pRoot )
 	{
 		delete m_pRoot;
@@ -512,14 +516,7 @@ bool CPkgFileSystemModel::DecryptEncFile( std::filesystem::path& szFilePath, uin
 	{
 		DBG_PRINTF( "DecryptBuffer failed! Filename: %s Encryption: %s Filesize: %u (0x%X)\n", szFilePath.filename().string().c_str(), PkgCipherToString( pHeader->iFlag ), pHeader->iFileSize, pHeader->iFileSize );
 		return false;
-	}
-
-	if ( ShouldRenameEncFiles() )
-	{
-		std::string szFileExtension = szFilePath.extension().string();
-		szFileExtension.erase( szFileExtension.find( 'e' ), 1 );
-		szFilePath.replace_extension( szFileExtension );
-	}
+	}	  	
 
 	return true;
 }
@@ -560,7 +557,7 @@ bool CPkgFileSystemModel::ExtractCheckedNodes()
 
 			if ( bShouldStop )
 			{
-				iThreadReturnCode.store( 2, std::memory_order_relaxed );
+				iThreadReturnCode = 2;
 				return;
 			}
 
@@ -579,7 +576,7 @@ bool CPkgFileSystemModel::ExtractCheckedNodes()
 			if ( !pNode->GetPkgEntry()->ReadPkgEntry( &pBuffer, &iBufferSize ) )
 			{
 				DBG_WPRINTF( L"Failed to read %s!\n", pNode->GetFilePath().c_str() );
-				iThreadReturnCode.store( 1, std::memory_order_relaxed );
+				iThreadReturnCode = 1;
 				return;
 			}
 
@@ -589,17 +586,29 @@ bool CPkgFileSystemModel::ExtractCheckedNodes()
 			targetFile += pNode->GetFilePath();
 
 			std::filesystem::path targetPath = targetFile;
-			targetPath.remove_filename();
-
+			targetPath.remove_filename();																					  
 			std::error_code errorCode;
-			std::filesystem::create_directories( targetPath, errorCode );
+			std::filesystem::create_directories( targetPath, errorCode );	
 
 			if ( errorCode )
 			{
 				DBG_WPRINTF( L"Couldn't create directory \"%s\"! Error: %S\n", targetPath.c_str(), errorCode.message().c_str() );
 				delete[] pRealBuffer;
-				iThreadReturnCode.store( 1, std::memory_order_relaxed );
+				iThreadReturnCode = 1;
 				return;
+			}
+
+			if ( ShouldDecompVtfFiles() && IsCompressedVtf( pBuffer ) )
+			{
+				if ( !DecompressVtf( pBuffer, iBufferSize ) )
+				{
+					DBG_WPRINTF( L"Couldn't decompress vtf \"%s\"!\n", targetFile.c_str() );
+					delete[] pRealBuffer;
+					iThreadReturnCode = 1;
+					return;
+				}
+
+				pRealBuffer = pBuffer;
 			}
 
 			if ( ShouldDecryptEncFiles() && IsFileContentEncrypted( pBuffer, iBufferSize ) )
@@ -608,10 +617,17 @@ bool CPkgFileSystemModel::ExtractCheckedNodes()
 				{
 					DBG_WPRINTF( L"Couldn't decrypt \"%s\"!\n", targetFile.c_str() );
 					delete[] pRealBuffer;
-					iThreadReturnCode.store( 1, std::memory_order_relaxed );
+					iThreadReturnCode = 1;
 					return;
 				}
-			}
+
+				if ( ShouldRenameEncFiles() )
+				{
+					std::string szFileExtension = targetFile.extension().string();
+					szFileExtension.erase( szFileExtension.find( 'e' ), 1 );
+					targetFile.replace_extension( szFileExtension );
+				}
+			}	 			
 
 			HANDLE hTargetFile = CreateFileW( targetFile.c_str(), GENERIC_WRITE, NULL, Q_NULLPTR, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, Q_NULLPTR );
 
@@ -619,7 +635,7 @@ bool CPkgFileSystemModel::ExtractCheckedNodes()
 			{
 				DBG_WPRINTF( L"Couldn't create file %s!\n", targetFile.c_str() );
 				delete[] pRealBuffer;
-				iThreadReturnCode.store( 1, std::memory_order_relaxed );
+				iThreadReturnCode = 1;
 				return;
 			}
 
@@ -631,7 +647,7 @@ bool CPkgFileSystemModel::ExtractCheckedNodes()
 				DBG_WPRINTF( L"Couldn't write file %s! Result: %s Bytes written: 0x%X (%i)\n", targetFile.c_str(), bResult ? L"TRUE" : L"FALSE", dwBytesWritten, dwBytesWritten );	  				
 				delete[] pRealBuffer;
 				CloseHandle( hTargetFile );
-				iThreadReturnCode.store( 1, std::memory_order_relaxed );
+				iThreadReturnCode = 1;
 				return;
 			}
 
@@ -642,7 +658,7 @@ bool CPkgFileSystemModel::ExtractCheckedNodes()
 
 	while ( std::this_thread::sleep_for( 5ms ), iCurrentEntry < m_CheckedIndexes.count() )
 	{
-		if ( procDlg.wasCanceled() )
+		if ( procDlg.wasCanceled() || iThreadReturnCode != 0 )
 		{
 			bShouldStop = true;
 			break;

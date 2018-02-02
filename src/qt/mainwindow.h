@@ -20,6 +20,7 @@ private slots:
 	void OnExit();
 	void OnDecryptToggle( bool bChecked );
 	void OnRenameToggle( bool bChecked );
+	void OnDecompressToggle( bool bChecked );
 	void OnUnpackClick();
 	void OnAbout();
 

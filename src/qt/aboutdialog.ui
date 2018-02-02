@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>365</width>
-    <height>223</height>
+    <height>249</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -67,7 +67,7 @@
            </font>
           </property>
           <property name="text">
-           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;An unpacker for Counter-Strike Online 2&lt;br/&gt;&lt;br/&gt;The following libraries are used:&lt;br/&gt;&lt;a href=&quot;https://www.cryptopp.com/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Crypto++&lt;/span&gt;&lt;/a&gt; by weidai11&lt;br/&gt;&lt;a href=&quot;https://www.qt.io/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Qt&lt;/span&gt;&lt;/a&gt; by The Qt Company&lt;br/&gt;&lt;a href=&quot;https://www.codeproject.com/Articles/1380/A-C-Implementation-of-the-Rijndael-Encryption-Decr&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;CRijndael&lt;/span&gt;&lt;/a&gt; class by Geroge Anescu&lt;br/&gt;&lt;a href=&quot;https://rpcs3.net/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;RPCS3&lt;/span&gt;&lt;/a&gt; team for UI code and the Git version header generator script&lt;br/&gt;For more information check the license specific file of each project&lt;br/&gt;&lt;br/&gt;&lt;a href=&quot;https://github.com/Ochii/UnCSO2&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Github&lt;/span&gt;&lt;/a&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;An unpacker for Counter-Strike Online 2&lt;br/&gt;&lt;br/&gt;The following libraries are used:&lt;br/&gt;&lt;a href=&quot;https://www.cryptopp.com/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Crypto++&lt;/span&gt;&lt;/a&gt; by weidai11&lt;br/&gt;&lt;a href=&quot;https://www.qt.io/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Qt&lt;/span&gt;&lt;/a&gt; by The Qt Company&lt;br/&gt;&lt;a href=&quot;https://www.codeproject.com/Articles/1380/A-C-Implementation-of-the-Rijndael-Encryption-Decr&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;CRijndael&lt;/span&gt;&lt;/a&gt; class by Geroge Anescu&lt;br/&gt;&lt;a href=&quot;https://rpcs3.net/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;RPCS3&lt;/span&gt;&lt;/a&gt; team for UI code and the Git version header generator script&lt;br/&gt;&lt;a href=&quot;https://github.com/ValveSoftware/source-sdk-2013&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Valve Software&lt;/span&gt;&lt;/a&gt; and &lt;a href=&quot;http://www.7-zip.org/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Igor Parlov&lt;/span&gt;&lt;/a&gt; for the lzmaDecoder&lt;br/&gt;&lt;br/&gt;For more information check the license specific file of each project&lt;br/&gt;&lt;br/&gt;&lt;a href=&quot;https://github.com/Ochii/UnCSO2&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Github&lt;/span&gt;&lt;/a&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
           <property name="textFormat">
            <enum>Qt::RichText</enum>

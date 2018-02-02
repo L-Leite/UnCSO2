@@ -88,6 +88,7 @@
     </property>
     <addaction name="actionDecrypt_encrypted_files"/>
     <addaction name="actionRename_encrypted_files"/>
+    <addaction name="actionDecompress_VTF_files"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuOptions"/>
@@ -134,6 +135,17 @@
    </property>
    <property name="text">
     <string>Rename encrypted files</string>
+   </property>
+  </action>
+  <action name="actionDecompress_VTF_files">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Decompress VTF files</string>
    </property>
   </action>
  </widget>

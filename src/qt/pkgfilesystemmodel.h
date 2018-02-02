@@ -47,10 +47,13 @@ public:
 	bool ExtractCheckedNodes();		
 
 	inline bool WasGenerated() { return m_bGenerated; }		
+
 	inline bool ShouldDecryptEncFiles() { return m_bShouldDecryptEncFiles; }
 	inline void SetDecryptEncFiles( bool bShouldDecryptEncFiles ) { m_bShouldDecryptEncFiles = bShouldDecryptEncFiles; }
 	inline bool ShouldRenameEncFiles() { return m_bShouldRenameEncFiles; }
 	inline void SetRenameEncFiles( bool bShouldRenameEncFiles ) { m_bShouldRenameEncFiles = bShouldRenameEncFiles; }
+	inline bool ShouldDecompVtfFiles() { return m_bShouldDecompVtfFiles; }
+	inline void SetDecompVtfFiles( bool bShouldDecompVtfFiles ) { m_bShouldDecompVtfFiles = bShouldDecompVtfFiles; }
 
 	enum
 	{
@@ -77,9 +80,11 @@ private:
 	Qt::SortOrder m_SortOrder;	 	
 	bool m_bForceSort;
 
-	bool m_bGenerated;
+	bool m_bGenerated;		 
+	
 	bool m_bShouldDecryptEncFiles;
 	bool m_bShouldRenameEncFiles;
+	bool m_bShouldDecompVtfFiles;
 };
 
 #endif // PKGFILESYSTEMMODEL_H

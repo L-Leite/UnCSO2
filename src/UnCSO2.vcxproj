@@ -39,6 +39,7 @@
     </CustomBuildAfterTargets>
     <IncludePath>$(SolutionDir)libs;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)libs\cryptopp\$(Platform)\Output\$(Configuration);$(LibraryPath)</LibraryPath>
+    <CodeAnalysisRuleSet>NativeRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>$(SolutionDir)bin\Windows-$(Platform)\$(Configuration)\</OutDir>
@@ -117,6 +118,8 @@ cmd /c $(SolutionDir)git-version-gen.cmd</Command>
     </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="cso2vtf.cpp" />
+    <ClCompile Include="lzmaDecoder.cpp" />
     <ClCompile Include="qt\GeneratedFiles\Debug\moc_mainwindow.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClCompile>
@@ -184,6 +187,8 @@ cmd /c $(SolutionDir)git-version-gen.cmd</Command>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="cso2vtf.h" />
+    <ClInclude Include="lzmaDecoder.h" />
     <ClInclude Include="version.h" />
     <CustomBuild Include="uncso2app.h">
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QTDIR)\bin\moc.exe;%(FullPath);$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
