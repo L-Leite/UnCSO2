@@ -2,7 +2,7 @@
 Extracts the encrypted content of Counter Strike Online 2's pkg files.
 
 ## Download 
-You may get a build of UnCSO2 [in here](https://github.com/Ochii/UnCSO2/releases).
+You may get a build of UnCSO2 [in here](https://github.com/Ochii/UnCSO2/releases/latest).
 
 ## How to use
 After running the executable, go to File > Open Folder and choose Counter Strike Online 2's data directory, the program will load the packed files entries afterwards.

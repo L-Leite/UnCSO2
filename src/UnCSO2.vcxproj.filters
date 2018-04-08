@@ -102,6 +102,9 @@
     <ClCompile Include="cso2vtf.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="cso2bsp.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="qt\mainwindow.ui">
@@ -161,6 +164,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="cso2vtf.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cso2bsp.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cso2zip_uncompressed.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -88,7 +88,12 @@
     </property>
     <addaction name="actionDecrypt_encrypted_files"/>
     <addaction name="actionRename_encrypted_files"/>
+    <addaction name="separator"/>
     <addaction name="actionDecompress_VTF_files"/>
+    <addaction name="actionReplace_toolsshadowblock_vmt"/>
+    <addaction name="separator"/>
+    <addaction name="actionDecompress_BSP_files"/>
+    <addaction name="actionConvert_BSP_lumps"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuOptions"/>
@@ -131,7 +136,7 @@
     <bool>true</bool>
    </property>
    <property name="checked">
-    <bool>false</bool>
+    <bool>true</bool>
    </property>
    <property name="text">
     <string>Rename encrypted files</string>
@@ -146,6 +151,42 @@
    </property>
    <property name="text">
     <string>Decompress VTF files</string>
+   </property>
+  </action>
+  <action name="actionDecompress_BSP_files">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Decompress BSP files</string>
+   </property>
+  </action>
+  <action name="actionConvert_BSP_lumps">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Convert BSP lumps</string>
+   </property>
+  </action>
+  <action name="actionReplace_toolsshadowblock_vmt">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Replace toolsshadowblock.vmt</string>
+   </property>
+   <property name="whatsThis">
+    <string/>
    </property>
   </action>
  </widget>

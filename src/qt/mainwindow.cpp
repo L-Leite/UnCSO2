@@ -16,7 +16,7 @@ CMainWindow::CMainWindow( QWidget* pParent )
 	ui.setupUi( this );
 	ui.unpackButton->setDisabled( true );
 
-	setWindowTitle( "UnCSO2 " + GetCurrentCommit() );
+	setWindowTitle( "UnCSO2 v" + GetAppVersion() + "-" + GetCurrentCommit() );
 
 	m_pPkgItemModel = new CPkgFileSystemModel( this );			
 
@@ -24,7 +24,10 @@ CMainWindow::CMainWindow( QWidget* pParent )
 	connect( ui.actionExit, SIGNAL( triggered() ), this, SLOT( OnExit() ) );	
 	connect( ui.actionDecrypt_encrypted_files, SIGNAL( toggled( bool ) ), this, SLOT( OnDecryptToggle( bool ) ) );
 	connect( ui.actionRename_encrypted_files, SIGNAL( toggled( bool ) ), this, SLOT( OnRenameToggle( bool ) ) );
-	connect( ui.actionDecompress_VTF_files, SIGNAL( toggled( bool ) ), this, SLOT( OnDecompressToggle( bool ) ) );
+	connect( ui.actionDecompress_VTF_files, SIGNAL( toggled( bool ) ), this, SLOT( OnDecompressVtfToggle( bool ) ) );
+	connect( ui.actionReplace_toolsshadowblock_vmt, SIGNAL( toggled( bool ) ), this, SLOT( OnReplaceShadowblock( bool ) ) );
+	connect( ui.actionDecompress_BSP_files, SIGNAL( toggled( bool ) ), this, SLOT( OnDecompressBspToggle( bool ) ) );
+	connect( ui.actionConvert_BSP_lumps, SIGNAL( toggled( bool ) ), this, SLOT( OnConvertBspLumps( bool ) ) );
 	connect( ui.unpackButton, SIGNAL( released() ), this, SLOT( OnUnpackClick() ) );
 	connect( ui.actionAbout, SIGNAL( triggered() ), this, SLOT( OnAbout() ) );
 	connect( ui.actionAboutQt, &QAction::triggered, this, &QApplication::aboutQt );
@@ -108,10 +111,28 @@ void CMainWindow::OnRenameToggle( bool bChecked )
 	m_pPkgItemModel->SetRenameEncFiles( bChecked );
 }
 
-void CMainWindow::OnDecompressToggle( bool bChecked )
+void CMainWindow::OnDecompressVtfToggle( bool bChecked )
 { 
 	DBG_PRINTF( "toggled\n" );
 	m_pPkgItemModel->SetDecompVtfFiles( bChecked );
+}
+
+void CMainWindow::OnReplaceShadowblock( bool bChecked )
+{
+	DBG_PRINTF( "toggled\n" );
+	m_pPkgItemModel->SetReplaceShadowblock( bChecked );
+}
+
+void CMainWindow::OnDecompressBspToggle( bool bChecked )
+{
+	DBG_PRINTF( "toggled\n" );
+	m_pPkgItemModel->SetDecompBspFiles( bChecked );
+}
+
+void CMainWindow::OnConvertBspLumps( bool bChecked )
+{
+	DBG_PRINTF( "toggled\n" );
+	m_pPkgItemModel->SetFixBspLumps( bChecked );
 }
 
 void CMainWindow::OnUnpackClick()

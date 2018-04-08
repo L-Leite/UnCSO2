@@ -13,6 +13,7 @@
 
 #include <CryptoPP/md5.h>
 
+#include "cso2bsp.h"
 #include "cso2vtf.h"
 #include "decryption.h"
 #include "mainwindow.h"
@@ -38,6 +39,7 @@ CPkgFileSystemModel::CPkgFileSystemModel( CMainWindow* pParent /*= Q_NULLPTR*/ )
 	m_bShouldDecryptEncFiles = true;
 	m_bShouldRenameEncFiles = false;
 	m_bShouldDecompVtfFiles = true;
+	m_bShouldDecompBspFiles = true;
 }
 
 CPkgFileSystemModel::~CPkgFileSystemModel()
@@ -370,16 +372,16 @@ bool CPkgFileSystemModel::GenerateFileSystem()
 		{
 			if ( bShouldStop )
 			{
-				iThreadReturnCode.store( 2, std::memory_order_relaxed );
+				iThreadReturnCode = 2;
 				return;
 			}
 
-			szCurrentPkgFile.store( &szFileName, std::memory_order_release );
+			szCurrentPkgFile.store( &szFileName, std::memory_order_relaxed );
 
 			if ( !LoadPkgEntries( szFileName, this ) )
 			{
 				DBG_PRINTF( "LoadPkgEntries failed! Data file: %s\n", szFileName.c_str() );			 				
-				iThreadReturnCode.store( 1, std::memory_order_relaxed );
+				iThreadReturnCode = 1;
 				return;
 
 			}
@@ -397,7 +399,7 @@ bool CPkgFileSystemModel::GenerateFileSystem()
 		}
 
 		procDlg.setValue( iCurrentPkg );
-		procDlg.setLabelText( szCurrentPkgFile.load( std::memory_order_acquire )->c_str() );
+		procDlg.setLabelText( szCurrentPkgFile.load( std::memory_order_consume )->c_str() );
 		QCoreApplication::processEvents();
 	}
 
@@ -549,6 +551,8 @@ bool CPkgFileSystemModel::ExtractCheckedNodes()
 	std::atomic<bool> bShouldStop = false;
 	std::atomic<int> iThreadReturnCode = 0;
 
+	static size_t iShadowblockHash = std::hash<std::string>{}("toolsshadowblock.vmt");
+
 	std::thread extractThread( [&]()
 	{
 		for ( const auto& index : m_CheckedIndexes )
@@ -573,7 +577,21 @@ bool CPkgFileSystemModel::ExtractCheckedNodes()
 
 			pCurrentNode = pNode;
 
-			if ( !pNode->GetPkgEntry()->ReadPkgEntry( &pBuffer, &iBufferSize ) )
+			if ( ShouldReplaceShadowblock() && iShadowblockHash == pNode->GetFileNameHash() )
+			{
+				// it replaces with this (CRLF)
+				// "LightmappedGeneric"
+				// {
+				// 		"$translucent" "1"
+				// 		"$alpha" "0"
+				// }			   
+				static const char* szNewVmt = "\"LightmappedGeneric\"\r\n{\r\n\t\"$translucent\"\t\"1\"\r\n\t\"$alpha\"\t\"0\"\r\n}\r\n";
+				static const size_t iNewVmtSize = strlen( szNewVmt );
+				iBufferSize = iNewVmtSize;
+				pBuffer = new uint8_t[iNewVmtSize];
+				memcpy( pBuffer, szNewVmt, iNewVmtSize );
+			}
+			else if ( !pNode->GetPkgEntry()->ReadPkgEntry( &pBuffer, &iBufferSize ) )
 			{
 				DBG_WPRINTF( L"Failed to read %s!\n", pNode->GetFilePath().c_str() );
 				iThreadReturnCode = 1;
@@ -596,6 +614,19 @@ bool CPkgFileSystemModel::ExtractCheckedNodes()
 				delete[] pRealBuffer;
 				iThreadReturnCode = 1;
 				return;
+			}
+
+			if ( ShouldDecompBspFiles() && IsBspFile( pBuffer ) )
+			{
+				if ( !DecompressBsp( pBuffer, iBufferSize, ShouldFixBspLumps() ) )
+				{
+					DBG_WPRINTF( L"Couldn't decompress bsp \"%s\"!\n", targetFile.c_str() );
+					delete[] pRealBuffer;
+					iThreadReturnCode = 1;
+					return;
+				}
+
+				pRealBuffer = pBuffer;
 			}
 
 			if ( ShouldDecompVtfFiles() && IsCompressedVtf( pBuffer ) )
@@ -627,7 +658,7 @@ bool CPkgFileSystemModel::ExtractCheckedNodes()
 					szFileExtension.erase( szFileExtension.find( 'e' ), 1 );
 					targetFile.replace_extension( szFileExtension );
 				}
-			}	 			
+			}						
 
 			HANDLE hTargetFile = CreateFileW( targetFile.c_str(), GENERIC_WRITE, NULL, Q_NULLPTR, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, Q_NULLPTR );
 

@@ -1,4 +1,3 @@
 <RCC>
-    <qresource prefix="CSO2Tools">
-    </qresource>
+    <qresource prefix="/CSO2Tools"/>
 </RCC>

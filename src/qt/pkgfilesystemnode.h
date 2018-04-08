@@ -29,11 +29,16 @@ public:
 	inline int GetLocationOf( CPkgFileSystemNode* pChild ) { return m_childNodes.indexOf( pChild ); }
 		  	
 	inline CCSO2PkgEntry* GetPkgEntry() { return m_pPkgEntry; }
+
 	inline const std::filesystem::path& GetFilePath() const { return m_filePath; }
+
 	inline const QString GetFileName() const { return m_szFileName; }
+	inline size_t GetFileNameHash() const { return m_iFileNameHash; }
 	inline const QString GetFileType() const { if ( m_bIsDirectory ) return "Directory"; return m_szFileExtension; }
+
 	inline qint64 GetFilePackedSize() const { if ( m_bIsDirectory ) return NULL; return m_pPkgEntry->GetPackedSize(); }
 	inline qint64 GetFileUnpackedSize() const { if ( m_bIsDirectory ) return NULL; return m_pPkgEntry->GetUnpackedSize(); }
+
 	inline bool IsDirectory() const { return m_bIsDirectory; }	
 
 private:

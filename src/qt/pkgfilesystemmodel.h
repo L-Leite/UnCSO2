@@ -54,6 +54,12 @@ public:
 	inline void SetRenameEncFiles( bool bShouldRenameEncFiles ) { m_bShouldRenameEncFiles = bShouldRenameEncFiles; }
 	inline bool ShouldDecompVtfFiles() { return m_bShouldDecompVtfFiles; }
 	inline void SetDecompVtfFiles( bool bShouldDecompVtfFiles ) { m_bShouldDecompVtfFiles = bShouldDecompVtfFiles; }
+	inline bool ShouldDecompBspFiles() { return m_bShouldDecompBspFiles; }
+	inline void SetDecompBspFiles( bool bShouldDecompBspFiles ) { m_bShouldDecompBspFiles = bShouldDecompBspFiles; }
+	inline bool ShouldReplaceShadowblock() { return m_bShouldReplaceShadowblock; }
+	inline void SetReplaceShadowblock( bool bShouldReplaceShadowblock ) { m_bShouldReplaceShadowblock = bShouldReplaceShadowblock; }
+	inline bool ShouldFixBspLumps() { return m_bShouldFixBspLumps; }
+	inline void SetFixBspLumps( bool bShouldFixBspLumps ) { m_bShouldFixBspLumps = bShouldFixBspLumps; }
 
 	enum
 	{
@@ -85,6 +91,9 @@ private:
 	bool m_bShouldDecryptEncFiles;
 	bool m_bShouldRenameEncFiles;
 	bool m_bShouldDecompVtfFiles;
+	bool m_bShouldReplaceShadowblock;
+	bool m_bShouldDecompBspFiles;
+	bool m_bShouldFixBspLumps;
 };
 
 #endif // PKGFILESYSTEMMODEL_H

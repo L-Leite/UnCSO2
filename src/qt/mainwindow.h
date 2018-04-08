@@ -20,7 +20,10 @@ private slots:
 	void OnExit();
 	void OnDecryptToggle( bool bChecked );
 	void OnRenameToggle( bool bChecked );
-	void OnDecompressToggle( bool bChecked );
+	void OnDecompressVtfToggle( bool bChecked );
+	void OnReplaceShadowblock( bool bChecked );
+	void OnDecompressBspToggle( bool bChecked );
+	void OnConvertBspLumps( bool bChecked );
 	void OnUnpackClick();
 	void OnAbout();
 
