@@ -361,10 +361,15 @@ bool CPkgFileSystemModel::GenerateFileSystem()
 	procDlg.setFixedWidth( QLabel( "This is the very length of the progressdialog due to hidpi reasons." ).sizeHint().width() );
 	procDlg.show();
 
-	std::atomic<int> iCurrentPkg = 0;
-	std::atomic<const std::string*> szCurrentPkgFile;
-	std::atomic<bool> bShouldStop = false;
-	std::atomic<int> iThreadReturnCode = 0;
+	static std::atomic<int> iCurrentPkg;
+	static std::atomic<const std::string*> szCurrentPkgFile;
+	static std::atomic<bool> bShouldStop;
+	static std::atomic<int> iThreadReturnCode;
+
+	iCurrentPkg = 0;
+	szCurrentPkgFile = nullptr;
+	bShouldStop = false;
+	iThreadReturnCode = 0;
 
 	std::thread loadThread( [&]()
 	{
@@ -403,7 +408,8 @@ bool CPkgFileSystemModel::GenerateFileSystem()
 		QCoreApplication::processEvents();
 	}
 
-	loadThread.join();
+	if ( loadThread.joinable() )
+		loadThread.join();
 
 	if ( iThreadReturnCode == 1 )
 	{
@@ -546,10 +552,15 @@ bool CPkgFileSystemModel::ExtractCheckedNodes()
 	procDlg.setRange( 0, m_CheckedIndexes.count() );
 	procDlg.show();			
 
-	std::atomic<int> iCurrentEntry = 0;
-	std::atomic<CPkgFileSystemNode*> pCurrentNode = nullptr;
-	std::atomic<bool> bShouldStop = false;
-	std::atomic<int> iThreadReturnCode = 0;
+	static std::atomic<int> iCurrentEntry = 0;
+	static std::atomic<CPkgFileSystemNode*> pCurrentNode;
+	static std::atomic<bool> bShouldStop;
+	static std::atomic<int> iThreadReturnCode;
+
+	iCurrentEntry = 0;		 	
+	pCurrentNode = nullptr;
+	bShouldStop = false;
+	iThreadReturnCode = 0;
 
 	static size_t iShadowblockHash = std::hash<std::string>{}("toolsshadowblock.vmt");
 
@@ -610,7 +621,6 @@ bool CPkgFileSystemModel::ExtractCheckedNodes()
 
 			if ( errorCode )
 			{
-				DBG_WPRINTF( L"Couldn't create directory \"%s\"! Error: %S\n", targetPath.c_str(), errorCode.message().c_str() );
 				delete[] pRealBuffer;
 				iThreadReturnCode = 1;
 				return;
@@ -620,7 +630,6 @@ bool CPkgFileSystemModel::ExtractCheckedNodes()
 			{
 				if ( !DecompressBsp( pBuffer, iBufferSize, ShouldFixBspLumps() ) )
 				{
-					DBG_WPRINTF( L"Couldn't decompress bsp \"%s\"!\n", targetFile.c_str() );
 					delete[] pRealBuffer;
 					iThreadReturnCode = 1;
 					return;
@@ -633,7 +642,6 @@ bool CPkgFileSystemModel::ExtractCheckedNodes()
 			{
 				if ( !DecompressVtf( pBuffer, iBufferSize ) )
 				{
-					DBG_WPRINTF( L"Couldn't decompress vtf \"%s\"!\n", targetFile.c_str() );
 					delete[] pRealBuffer;
 					iThreadReturnCode = 1;
 					return;
@@ -646,7 +654,6 @@ bool CPkgFileSystemModel::ExtractCheckedNodes()
 			{
 				if ( !DecryptEncFile( targetFile, pBuffer, iBufferSize ) )
 				{
-					DBG_WPRINTF( L"Couldn't decrypt \"%s\"!\n", targetFile.c_str() );
 					delete[] pRealBuffer;
 					iThreadReturnCode = 1;
 					return;
@@ -700,7 +707,8 @@ bool CPkgFileSystemModel::ExtractCheckedNodes()
 		QCoreApplication::processEvents();
 	}			
 
-	extractThread.join();					
+	if ( extractThread.joinable() )
+		extractThread.join();		
 
 	if ( iThreadReturnCode == 1 )
 	{

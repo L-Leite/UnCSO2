@@ -75,9 +75,9 @@ static char *s_LumpNames[] = {
 class CLumpManager
 {
 public:
-	CLumpManager( uint8_t* pBspBuffer )
+	CLumpManager( uint8_t* pBspBuffer, size_t iBspSize )
 	{
-		SetBspBuffer( pBspBuffer );
+		SetBspBuffer( pBspBuffer, iBspSize );
 		DecompressAndRebuildBsp();
 	}
 
@@ -152,8 +152,29 @@ public:
 	}
 
 	// when everything is done, allocate memory for the new bsp and copy contents to it
-	bool CreateNewBspBuffer( uint8_t*& pOutBuffer, uint32_t& iOutBufferSize )
+	bool CreateNewBspBuffer( uint8_t*& pOutBuffer, uint32_t& iOutBufferSize, bool bShouldFixLumps )
 	{				
+		if ( !bShouldFixLumps )
+		{
+			if ( !m_pBspBuffer )
+			{
+				DBG_PRINTF( "BSP buffer is null!\n" );
+				return false;
+			}
+
+			if ( !m_iBspSize )
+			{
+				DBG_PRINTF( "BSP size is null!\n" );
+				return false;
+			}
+
+			iOutBufferSize = m_iBspSize;		  
+			pOutBuffer = new uint8_t[iOutBufferSize];
+			memcpy( pOutBuffer, m_pBspBuffer, iOutBufferSize );
+
+			return true;
+		}
+
 		size_t iTotalLumpSize = GetNewLumpTotalDataSize();		
 
 		if ( !iTotalLumpSize )
@@ -188,9 +209,10 @@ public:
 	}
 
 private:
-	inline void SetBspBuffer( uint8_t* pBspBuffer )
+	inline void SetBspBuffer( uint8_t* pBspBuffer, size_t iBspSize )
 	{
 		m_pBspBuffer = pBspBuffer;
+		m_iBspSize = iBspSize;
 		m_pBspHeader = (dheader_t*) m_pBspBuffer;
 	}
 
@@ -261,12 +283,13 @@ private:
 		uint8_t* pNewBuffer = new uint8_t[vBspBuffer.size()];
 		memcpy( pNewBuffer, vBspBuffer.data(), vBspBuffer.size() );
 
-		SetBspBuffer( pNewBuffer );
+		SetBspBuffer( pNewBuffer, vBspBuffer.size() );
 	}
 
 private:
 	dheader_t* m_pBspHeader;
 	uint8_t* m_pBspBuffer;
+	size_t m_iBspSize;
 
 	dheader_t m_NewBspHeader;
 	std::vector<uint8_t> m_NewLumpsData[HEADER_LUMPS];
@@ -1370,7 +1393,7 @@ bool DecompressBsp( uint8_t*& pBuffer, uint32_t& iBufferSize, bool bShouldFixLum
 		return true;
 	}
 
-	CLumpManager lumpManager( pBuffer );
+	CLumpManager lumpManager( pBuffer, iBufferSize );
 	
 	if ( bShouldFixLumps )
 	{
@@ -1380,5 +1403,5 @@ bool DecompressBsp( uint8_t*& pBuffer, uint32_t& iBufferSize, bool bShouldFixLum
 
 	lumpManager.BuildNewLumpsHeaders();
 
-	return lumpManager.CreateNewBspBuffer( pBuffer, iBufferSize );
+	return lumpManager.CreateNewBspBuffer( pBuffer, iBufferSize, bShouldFixLumps );
 }
