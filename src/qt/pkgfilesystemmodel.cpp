@@ -37,9 +37,11 @@ CPkgFileSystemModel::CPkgFileSystemModel( CMainWindow* pParent /*= Q_NULLPTR*/ )
 	m_bGenerated = false;
 	m_pRoot = new CPkgFileSystemNode();
 	m_bShouldDecryptEncFiles = true;
-	m_bShouldRenameEncFiles = false;
+	m_bShouldRenameEncFiles = true;
 	m_bShouldDecompVtfFiles = true;
 	m_bShouldDecompBspFiles = true;
+	m_bShouldReplaceShadowblock = true;
+	m_bShouldFixBspLumps = true;
 }
 
 CPkgFileSystemModel::~CPkgFileSystemModel()
@@ -621,6 +623,7 @@ bool CPkgFileSystemModel::ExtractCheckedNodes()
 
 			if ( errorCode )
 			{
+				DBG_WPRINTF( L"Couldn't create directory \"%s\"! Error: %S\n", targetPath.wstring().c_str(), errorCode.message().c_str() );
 				delete[] pRealBuffer;
 				iThreadReturnCode = 1;
 				return;
@@ -630,6 +633,7 @@ bool CPkgFileSystemModel::ExtractCheckedNodes()
 			{
 				if ( !DecompressBsp( pBuffer, iBufferSize, ShouldFixBspLumps() ) )
 				{
+					DBG_WPRINTF( L"Couldn't decompress bsp \"%s\"!\n", targetFile.wstring().c_str() );
 					delete[] pRealBuffer;
 					iThreadReturnCode = 1;
 					return;
@@ -642,6 +646,7 @@ bool CPkgFileSystemModel::ExtractCheckedNodes()
 			{
 				if ( !DecompressVtf( pBuffer, iBufferSize ) )
 				{
+					DBG_WPRINTF( L"Couldn't decompress vtf \"%s\"!\n", targetFile.wstring().c_str() );
 					delete[] pRealBuffer;
 					iThreadReturnCode = 1;
 					return;
@@ -654,6 +659,7 @@ bool CPkgFileSystemModel::ExtractCheckedNodes()
 			{
 				if ( !DecryptEncFile( targetFile, pBuffer, iBufferSize ) )
 				{
+					DBG_WPRINTF( L"Couldn't decrypt \"%s\"!\n", targetFile.wstring().c_str() );
 					delete[] pRealBuffer;
 					iThreadReturnCode = 1;
 					return;
