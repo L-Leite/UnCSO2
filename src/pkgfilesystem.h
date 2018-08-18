@@ -74,3 +74,35 @@ private:
 };				
 
 bool LoadPkgEntries( const std::string& szPkgFilename, CPkgFileSystemModel* pFileSystemModel );
+
+enum GameDataProvider
+{
+	GAMEDATAPROVIDER_NONE = -1,
+	GAMEDATAPROVIDER_NEXON = 0, // south korean version
+	GAMEDATAPROVIDER_TIANCITY // chinese version
+};
+
+extern GameDataProvider g_GameDataProvider;
+
+inline void DetectGameDataProvider(std::vector<std::string>& vGameFiles)
+{			 
+	bool bFoundTiancityDll = std::find(vGameFiles.begin(), vGameFiles.end(), "sedata.dll") != vGameFiles.end();
+
+	if (bFoundTiancityDll)
+		g_GameDataProvider = GAMEDATAPROVIDER_TIANCITY;
+	else
+		g_GameDataProvider = GAMEDATAPROVIDER_NEXON;
+}
+
+inline const wchar_t* GetGameDataProviderStr()
+{
+	switch (g_GameDataProvider)
+	{
+		case GAMEDATAPROVIDER_NEXON:
+			return L"Nexon (South Korea)";
+		case GAMEDATAPROVIDER_TIANCITY:
+			return L"Tiancity (China)";
+		default:
+			return L"unknown";
+	}
+}

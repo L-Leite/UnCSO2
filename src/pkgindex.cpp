@@ -8,10 +8,11 @@
 #include <cryptopp/modes.h>
 
 #include "pkgindex.h"
+#include "pkgfilesystem.h"
 #include "decryption.h"
 
 std::vector<std::string> g_vPkgFilenames;
-std::string g_szPkgListFilename = CSO2_CHN_PKGLISTFILENAME;
+std::string g_szPkgListFilename = CSO2_PKGLIST_FILENAME;
 
 void FillPkgArrayFromBuffer( std::vector<std::string>& vOutPkgFIleNames, uint8_t* pFileBuffer )
 {	
@@ -95,7 +96,9 @@ bool GetPkgFileNames( const std::filesystem::path& pkgDirectoryPath, std::vector
 		return false;
 	}	
 
-	FillPkgArrayFromBuffer( vOutPkgFileNames, pIndexFileBuffer );
+	FillPkgArrayFromBuffer(vOutPkgFileNames, pIndexFileBuffer);	
+	DetectGameDataProvider(vOutPkgFileNames);
+	DBG_WPRINTF(L"Detected game data provider: %s\n", GetGameDataProviderStr());
 
 	delete[] pIndexFileBuffer;					
 	return true;

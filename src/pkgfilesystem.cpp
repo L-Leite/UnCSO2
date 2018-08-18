@@ -5,8 +5,39 @@
 
 #include <cryptopp/md5.h>		
 
-static const std::string s_szPackageFileKey = "\x9B\x65\xC7\x9B\xC7\xDF\x8E\x7E\xD4\xC6\x59\x52\x5C\xF7\x22\xFF\xF4\xE8\xFF\xE7\xB5\xC2\x77";
-static const std::string s_szPackageEntryKey = "\x8E\x5C\xB8\x92\x45\xD1\x90\xBA\x82\x0F\xD9\x7A\x99\x8E\xB3\x87\xF7";
+static const std::string s_szTiancityPackageFileKey = "\x9B\x65\xC7\x9B\xC7\xDF\x8E\x7E\xD4\xC6\x59\x52\x5C\xF7\x22\xFF\xF4\xE8\xFF\xE7\xB5\xC2\x77";
+static const std::string s_szNexonPackageFileKey = "\x6C\x6B\x67\x75\x69\x37\x38\x31\x6B\x6C\x37\x38\x39\x73\x64\x21\x40\x23\x25\x38\x39\x26\x5E\x73\x64";
+
+static const std::string s_szTiancityPackageEntryKey = "\x8E\x5C\xB8\x92\x45\xD1\x90\xBA\x82\x0F\xD9\x7A\x99\x8E\xB3\x87\xF7";
+static const std::string s_szNexonPackageEntryKey = "\x5E\x39\x67\x45\x72\x67\x32\x53\x78\x37\x62\x6E\x6B\x37\x40\x23\x73\x64\x66\x6A\x6E\x68\x40";
+
+GameDataProvider g_GameDataProvider = GameDataProvider::GAMEDATAPROVIDER_NONE;
+
+static const std::string& GetPackageFileKey()
+{
+	switch (g_GameDataProvider)
+	{
+		case GAMEDATAPROVIDER_NEXON:
+			return s_szNexonPackageFileKey;
+		case GAMEDATAPROVIDER_TIANCITY:
+			return s_szTiancityPackageFileKey;
+		default:
+			throw std::exception("Unknown game data provider!\n");
+	}
+}
+
+static const std::string& GetPackageEntryKey()
+{
+	switch (g_GameDataProvider)
+	{
+		case GAMEDATAPROVIDER_NEXON:
+			return s_szNexonPackageEntryKey;
+		case GAMEDATAPROVIDER_TIANCITY:
+			return s_szTiancityPackageEntryKey;
+		default:
+			throw std::exception("Unknown game data provider!\n");
+	}
+}
 
 void ConvertPathToUnix( std::string& pathToConvert )
 {
@@ -75,7 +106,7 @@ bool LoadPkgEntries( const std::string& szPkgFilename, CPkgFileSystemModel* pFil
 	dwCurrentFileOffset += dwBytesRead;
 
 	std::string szGeneratedKey;
-	MakePkgKeyMd5( szPkgFilename, s_szPackageFileKey, szGeneratedKey );
+	MakePkgKeyMd5( szPkgFilename, GetPackageFileKey(), szGeneratedKey );
 
 	DecryptBuffer( PKGCIPHER_RIJNDAEL, &pkgHeader, sizeof( pkgHeader ), (uint8_t*) szGeneratedKey.c_str(), szGeneratedKey.length() );
 
@@ -156,7 +187,7 @@ bool CCSO2PkgEntry::ReadPkgEntry( uint8_t** pOutBuffer, uint32_t* pOutSize /*= n
 	std::filesystem::path filePath = m_szEntryPath;
 
 	if ( m_bIsEntryEncrypted )
-		MakePkgKeyMd5( filePath.filename().string().c_str(), s_szPackageEntryKey, szGeneratedKey );
+		MakePkgKeyMd5( filePath.filename().string().c_str(), GetPackageEntryKey(), szGeneratedKey );
 
 	assert( m_iPackedSize >= m_iUnpackedSize );	// Packed size should always be bigger than unpacked
 	uint8_t* pBuffer = new uint8_t[m_iPackedSize];		 	
