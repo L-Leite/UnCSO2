@@ -1,6 +1,12 @@
 # UnCSO2
 Extracts the encrypted content of Counter Strike Online 2's pkg files. At the moment only Tiancity's (chinese) version is compatible.
 
+It can extract data from the following providers:
+
+- **Nexon** (South Korean)
+
+- **Tiancity** (Chinese)
+
 ## Download 
 You may download the latest build of UnCSO2 [here](https://github.com/Ochii/UnCSO2/releases/latest).
 
