@@ -84,9 +84,10 @@ enum GameDataProvider
 
 extern GameDataProvider g_GameDataProvider;
 
-inline void DetectGameDataProvider(std::vector<std::string>& vGameFiles)
+inline void DetectGameDataProvider( const uint8_t* pFileBuffer )
 {			 
-	bool bFoundTiancityDll = std::find(vGameFiles.begin(), vGameFiles.end(), "sedata.dll") != vGameFiles.end();
+	std::string szPkgBuffer = reinterpret_cast<const char*>(pFileBuffer);
+	bool bFoundTiancityDll = szPkgBuffer.find( ".pkg" ) != std::string::npos;
 
 	if (bFoundTiancityDll)
 		g_GameDataProvider = GAMEDATAPROVIDER_TIANCITY;

@@ -96,8 +96,8 @@ bool GetPkgFileNames( const std::filesystem::path& pkgDirectoryPath, std::vector
 		return false;
 	}	
 
+	DetectGameDataProvider( pIndexFileBuffer );
 	FillPkgArrayFromBuffer(vOutPkgFileNames, pIndexFileBuffer);	
-	DetectGameDataProvider(vOutPkgFileNames);
 	DBG_WPRINTF(L"Detected game data provider: %s\n", GetGameDataProviderStr());
 
 	delete[] pIndexFileBuffer;					
