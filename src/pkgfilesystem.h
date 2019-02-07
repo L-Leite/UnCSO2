@@ -87,7 +87,7 @@ extern GameDataProvider g_GameDataProvider;
 inline void DetectGameDataProvider( const uint8_t* pFileBuffer )
 {			 
 	std::string szPkgBuffer = reinterpret_cast<const char*>(pFileBuffer);
-	bool bFoundTiancityDll = szPkgBuffer.find( ".pkg" ) != std::string::npos;
+	bool bFoundTiancityDll = szPkgBuffer.find( "sedata.dll" ) != std::string::npos;
 
 	if (bFoundTiancityDll)
 		g_GameDataProvider = GAMEDATAPROVIDER_TIANCITY;
