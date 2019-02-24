@@ -79,7 +79,8 @@ enum GameDataProvider
 {
 	GAMEDATAPROVIDER_NONE = -1,
 	GAMEDATAPROVIDER_NEXON = 0, // south korean version
-	GAMEDATAPROVIDER_TIANCITY // chinese version
+	GAMEDATAPROVIDER_TIANCITY, // chinese version
+	GAMEDATAPROVIDER_BEANFUN // taiwanese version
 };
 
 extern GameDataProvider g_GameDataProvider;
@@ -88,9 +89,12 @@ inline void DetectGameDataProvider( const uint8_t* pFileBuffer )
 {			 
 	std::string szPkgBuffer = reinterpret_cast<const char*>(pFileBuffer);
 	bool bFoundTiancityDll = szPkgBuffer.find( "sedata.dll" ) != std::string::npos;
+	bool bIsBeancity = szPkgBuffer.find( "be607ef651369efec2dbf8ee4eb18c23.pkg" ) != std::string::npos;
 
 	if (bFoundTiancityDll)
 		g_GameDataProvider = GAMEDATAPROVIDER_TIANCITY;
+	else if (bIsBeancity)
+		g_GameDataProvider = GAMEDATAPROVIDER_BEANFUN;
 	else
 		g_GameDataProvider = GAMEDATAPROVIDER_NEXON;
 }
@@ -103,6 +107,8 @@ inline const wchar_t* GetGameDataProviderStr()
 			return L"Nexon (South Korea)";
 		case GAMEDATAPROVIDER_TIANCITY:
 			return L"Tiancity (China)";
+		case GAMEDATAPROVIDER_BEANFUN:
+			return L"Beanfun (Taiwan)";
 		default:
 			return L"unknown";
 	}

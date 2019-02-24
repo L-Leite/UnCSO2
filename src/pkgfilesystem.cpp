@@ -7,9 +7,11 @@
 
 static const std::string s_szTiancityPackageFileKey = "\x9B\x65\xC7\x9B\xC7\xDF\x8E\x7E\xD4\xC6\x59\x52\x5C\xF7\x22\xFF\xF4\xE8\xFF\xE7\xB5\xC2\x77";
 static const std::string s_szNexonPackageFileKey = "\x6C\x6B\x67\x75\x69\x37\x38\x31\x6B\x6C\x37\x38\x39\x73\x64\x21\x40\x23\x25\x38\x39\x26\x5E\x73\x64";
+static const std::string s_szBeanfunPackageFileKey = "\x86\x39\x53\xBD\x16\x11\x6D\x06\x2A\x84\xF3\x4E\xE0\x4A\xA3";
 
 static const std::string s_szTiancityPackageEntryKey = "\x8E\x5C\xB8\x92\x45\xD1\x90\xBA\x82\x0F\xD9\x7A\x99\x8E\xB3\x87\xF7";
 static const std::string s_szNexonPackageEntryKey = "\x5E\x39\x67\x45\x72\x67\x32\x53\x78\x37\x62\x6E\x6B\x37\x40\x23\x73\x64\x66\x6A\x6E\x68\x40";
+static const std::string s_szBeanfunPackageEntryKey = "\x1F\x9F\xF8\xF4\x18\xAC\x25\xA2\xBB\x37\x82\x6D\xA8\xAE\xA7\x28\xBA\xDD\xDD\xE4\x6B";
 
 GameDataProvider g_GameDataProvider = GameDataProvider::GAMEDATAPROVIDER_NONE;
 
@@ -21,6 +23,8 @@ static const std::string& GetPackageFileKey()
 			return s_szNexonPackageFileKey;
 		case GAMEDATAPROVIDER_TIANCITY:
 			return s_szTiancityPackageFileKey;
+		case GAMEDATAPROVIDER_BEANFUN:
+			return s_szBeanfunPackageFileKey;
 		default:
 			throw std::exception("Unknown game data provider!\n");
 	}
@@ -34,6 +38,8 @@ static const std::string& GetPackageEntryKey()
 			return s_szNexonPackageEntryKey;
 		case GAMEDATAPROVIDER_TIANCITY:
 			return s_szTiancityPackageEntryKey;
+		case GAMEDATAPROVIDER_BEANFUN:
+			return s_szBeanfunPackageEntryKey;
 		default:
 			throw std::exception("Unknown game data provider!\n");
 	}
