@@ -1,0 +1,5 @@
+<RCC>
+  <qresource prefix="icons">
+    <file>uncso2.svg</file>
+  </qresource>
+</RCC>
