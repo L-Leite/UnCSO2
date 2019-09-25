@@ -1,3 +1,9 @@
-[submodule "libs/cryptopp"]
-	path = libs/cryptopp
-	url = https://github.com/weidai11/cryptopp
+[submodule "libuncso2"]
+	path = libuncso2
+	url = https://github.com/L-Leite/libuncso2
+[submodule "external/gsl-lite"]
+	path = external/gsl-lite
+	url = https://github.com/martinmoene/gsl-lite
+[submodule "external/breeze-icons"]
+	path = external/breeze-icons
+	url = https://anongit.kde.org/breeze-icons.git
