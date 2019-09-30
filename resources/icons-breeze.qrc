@@ -8,8 +8,8 @@
 		<file alias="actions/16/archive-extract.svg">../external/breeze-icons/icons/actions/16/archive-extract.svg</file>
 		<file alias="actions/16/document-decrypt.svg">../external/breeze-icons/icons/actions/16/document-decrypt.svg</file>
 		<file alias="actions/16/document-open.svg">../external/breeze-icons/icons/actions/16/document-open.svg</file>
-		<file alias="actions/16/document-open-folder.svg">../external/breeze-icons/icons/actions/16/document-open-folder.svg</file>
-		<file alias="actions/16/document-preview.svg">../external/breeze-icons/icons/actions/16/document-preview.svg</file>
+		<file alias="actions/16/document-open-folder.svg">../external/breeze-icons/icons/actions/16/document-open.svg</file>
+		<file alias="actions/16/document-preview.svg">../external/breeze-icons/icons/actions/16/document-preview-archive.svg</file>
 		<file alias="actions/16/document-properties.svg">../external/breeze-icons/icons/actions/16/document-properties.svg</file>
 		<file alias="actions/16/help-about.svg">../external/breeze-icons/icons/actions/16/help-about.svg</file>
 
@@ -17,8 +17,8 @@
 		<file alias="actions/22/archive-extract.svg">../external/breeze-icons/icons/actions/22/archive-extract.svg</file>
 		<file alias="actions/22/document-decrypt.svg">../external/breeze-icons/icons/actions/22/document-decrypt.svg</file>
 		<file alias="actions/22/document-open.svg">../external/breeze-icons/icons/actions/22/document-open.svg</file>
-		<file alias="actions/22/document-open-folder.svg">../external/breeze-icons/icons/actions/22/document-open-folder.svg</file>
-		<file alias="actions/22/document-preview.svg">../external/breeze-icons/icons/actions/22/document-preview.svg</file>
+		<file alias="actions/22/document-open-folder.svg">../external/breeze-icons/icons/actions/22/document-open.svg</file>
+		<file alias="actions/22/document-preview.svg">../external/breeze-icons/icons/actions/22/document-preview-archive.svg</file>
 		<file alias="actions/22/document-properties.svg">../external/breeze-icons/icons/actions/22/document-properties.svg</file>
 		<file alias="actions/22/help-about.svg">../external/breeze-icons/icons/actions/22/help-about.svg</file>
 
@@ -26,8 +26,8 @@
 		<file alias="actions/24/archive-extract.svg">../external/breeze-icons/icons/actions/24/archive-extract.svg</file>
 		<file alias="actions/24/document-decrypt.svg">../external/breeze-icons/icons/actions/24/document-decrypt.svg</file>
 		<file alias="actions/24/document-open.svg">../external/breeze-icons/icons/actions/24/document-open.svg</file>
-		<file alias="actions/24/document-open-folder.svg">../external/breeze-icons/icons/actions/24/document-open-folder.svg</file>
-		<file alias="actions/24/document-preview.svg">../external/breeze-icons/icons/actions/24/document-preview.svg</file>
+		<file alias="actions/24/document-open-folder.svg">../external/breeze-icons/icons/actions/24/document-open.svg</file>
+		<file alias="actions/24/document-preview.svg">../external/breeze-icons/icons/actions/24/document-preview-archive.svg</file>
 		<file alias="actions/24/document-properties.svg">../external/breeze-icons/icons/actions/24/document-properties.svg</file>
 		<file alias="actions/24/help-about.svg">../external/breeze-icons/icons/actions/24/help-about.svg</file>
 
