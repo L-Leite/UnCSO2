@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=UnCSO2
+Exec=uc2 %F
+Icon=UnCSO2
+Comment=Extract Counter-Strike: Online 2 and Titanfall Online game
+Terminal=false
+Categories=Utility
+X-AppImage-Version=2.0.0
