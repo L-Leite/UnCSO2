@@ -2,6 +2,20 @@ cmake_minimum_required(VERSION 3.12.0)
 
 project(uc2 LANGUAGES CXX)
 
+#
+# Put Visual Studio resulting binaries out of their config directory
+#
+if(MSVC)
+  set(PKG_POSSIBLE_CONFIGS "Debug;Release;MinSizeRel;RelWithDebInfo")
+  foreach(CUR_CONFIG ${PKG_POSSIBLE_CONFIGS})
+    string(TOUPPER ${CUR_CONFIG} CUR_CONFIG)
+    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_${CUR_CONFIG} "${OUTPUT_DIRECTORY}")
+    set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_${CUR_CONFIG} "${OUTPUT_DIRECTORY}")
+    set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_${CUR_CONFIG} "${OUTPUT_DIRECTORY}")
+  endforeach()
+endif()
+
+option(UNCSO2_USE_LTO "Use 'Link Time Optimizations'" ON)
 option(UNCSO2_USE_CLANG_FSAPI "Use libc++fs when available" OFF)
 
 set(UNCSO2_ROOT_DIR "${PROJECT_SOURCE_DIR}")
@@ -30,6 +44,23 @@ generate_uc2_version(VERSION_FILE
                      ${UNCSO2_VERSION_OUT}
                      GIT_DIR
                      ${UNCSO2_GIT_DIR})
+
+if(UNCSO2_USE_LTO)
+  include(CheckIPOSupported)
+  check_ipo_supported(RESULT
+                      UNCSO2_IPO_SUPPORTED
+                      OUTPUT
+                      UNCSO2_IPO_ERR)
+
+  if(UNCSO2_IPO_SUPPORTED)
+    message(STATUS "UnCSO2: Using Link Time Optimizations")
+  else()
+    message(
+      FATAL_ERROR
+        "Link time optimization is not supported: <${CMAKE_INTERPROCEDURAL_OPTIMIZATION}>"
+      )
+  endif()
+endif()
 
 #
 # find dependencies
@@ -183,6 +214,11 @@ else()
                                  -Wconversion
                                  -pedantic)
   target_compile_options(uc2 PRIVATE -g)
+endif()
+
+if(UNCSO2_USE_LTO)
+  set_property(TARGET uc2 PROPERTY INTERPROCEDURAL_OPTIMIZATION TRUE)
+  set_property(TARGET uncso2 PROPERTY INTERPROCEDURAL_OPTIMIZATION TRUE)
 endif()
 
 if(PKG_BUILD_SHARED)
