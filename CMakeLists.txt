@@ -197,7 +197,11 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 #
 # Add executable to build.
 #
-add_executable(uc2 ${UNCSO2_ALL_SOURCES})
+if(WIN32)
+  add_executable(uc2 WIN32 ${UNCSO2_ALL_SOURCES})
+else()
+  add_executable(uc2 ${UNCSO2_ALL_SOURCES})
+endif()
 
 # add fallback menu icons
 add_dependencies(uc2 icons-breeze)
