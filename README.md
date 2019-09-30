@@ -1,69 +1,91 @@
 # UnCSO2
-Extracts the encrypted content of Counter Strike Online 2's pkg files. At the moment only Tiancity's (chinese) version is compatible.
 
-It can extract data from the following providers:
+![Alt text](./resources/uncso2.svg)
 
-- **Nexon** (South Korean)
+[![Build status](https://ci.appveyor.com/api/projects/status/voewv05x5ate6yoj/branch/master?svg=true)](https://ci.appveyor.com/project/L-Leite/uncso2/branch/master)
 
-- **Tiancity** (Chinese)
+A file data extractor for the videogames Counter Strike: Online 2 and Titanfall Online, for Windows and GNU/Linux.
+
+It uses ekey's reversing work published at [XeNTaX's forums](https://forum.xentax.com/viewtopic.php?f=21&t=11117).
+
+The program layout is based off KDE's Ark.
+
+It uses [libuncso2](https://github.com/L-Leite/libuncso2) as the back-end library.
 
 ## Download 
-You may download the latest build of UnCSO2 [here](https://github.com/Ochii/UnCSO2/releases/latest).
+You may download the latest build of UnCSO2 [here](https://github.com/L-Leite/UnCSO2/releases/latest).
 
-## How to use
-Open the program, then go to *File* > *Open Folder* and choose Counter Strike Online 2's data directory.
+## Features
 
-After loading the game's data, you may choose which files you wish to unpack by ticking their respective check box.
+Aside from extracting files from Counter-Strike: Online 2's and Titanfall Online's proprietary archive format, PKG, UnCSO2 can:
 
-When you're done selecting the files, press *Unpack selected items* and choose the directory where you wish to extract the files.
+- Explore and extract from individual PKG archives;
+- Explore and extract from entire game's filesystems (loads every PKG archive in their PKG index);
+- Preview and/or extract individual file entries;
+- Decrypt Counter-Strike: Online 2 files with an `.e*` prepended in their extension;
+- Decompress Counter-Strike: Online 2 texture files.
 
-### Options
-In *Options* you may pick:
+### Compatible CSO2 regions
 
-- **Decrypt encrypted files** - it decrypts files when needed (such as .etxt files);
+UnCSO2 **supports every Counter-Strike: Online 2 region**'s game data.
 
-- **Rename encrypted files** - renames decrypted files extension (.etxt would become .txt);
+Those regions are: South Korea, China, Taiwan and Japan.
 
-- **Decompress VTF files** - decompresses texture files in order to make them usable by games such as Counter-Strike: Source;
-
-- **Replace toolsshadowblock.vmt** - replaces *toolsshadowblock.vmt* content with an invisible material. *toolsshadowblock.vmt* is used in most of CSO2 maps and will display a black and yellow texture if used by other Source Engine game;
-
-- **Decompress BSP files** - decompresses map files;
-
-- **Convert BSP lumps** - tries to convert the maps to a more Counter-Strike: Source friendly version. Note: due to stock Source Engine limitations, some maps cannot be converted;
-
-## Bug reporting
-Feel free [to open an issue](https://github.com/Ochii/UnCSO2/issues) if you find a bug in the tool.
-
-The tool is also open to improvements, [open a pull request](https://github.com/Ochii/UnCSO2/pulls) if you have any.
-
-## How to build
+## Building
 
 ### Requirements
-- [Visual Studio 2017](https://www.visualstudio.com/downloads/)
-- [Qt 5.10](https://www.qt.io/download)
-- [Qt VS Tools](http://doc.qt.io/qtvstools/qtvstools-getting-started.html)
-- [Windows PowerShell](https://docs.microsoft.com/en-us/powershell/scripting/setup/installing-windows-powershell)
+- [CMake](https://cmake.org/download/) (must be in PATH);
+- [Qt 5.13](https://www.qt.io/download);
+- A C++17 compiler with `std::filesystem` support.
 
-Currently only Windows is supported.
+#### With Visual Studio
 
-### Before building
-On the project directory, run ```powershell ./setupcryptopp_win.ps1```. This Powershell script will replace a string in Crypto++'s *cryptolib.vcxproj* file to make it build with the ```MultiThreadedDLL``` instead of ```MultiThreaded``` so they can be compatible with prebuilt Qt binaries.
+You can generate project files for Visual Studio 15 by running the follwing commands:
 
-An alternative would be building Qt with ```MultiThreaded```.
+```sh
+# Create and go to the build directory
+mkdir build
+cd build
 
-### Building
-Open the solution *UnCSO2.sln* and build it in your preferred configuration.
+# Generate oroject files
+cmake -G "Visual Studio 15 2017" -A "x64" ../
+```
 
-If built successfully, you will find your binary inside the *bin* directory.
+You can then build the solution file `uc2.sln`.
 
-## Credits
+#### With other compilers
 
-- Ekey for [reversing the unpacking algorithm](http://forum.xentax.com/viewtopic.php?f=21&t=11117)
-- weidai11 for [Crypto++](https://www.cryptopp.com/)
-- The Qt Company for [Qt](https://www.qt.io/)
-- George Anescu for his [CRijndael](https://www.codeproject.com/Articles/1380/A-C-Implementation-of-the-Rijndael-Encryption-Decr) class
-- [RPCS3](https://rpcs3.net/)'s team for some UI code and the Git version header generator script
-- [Valve Software](https://github.com/ValveSoftware/source-sdk-2013) and [Igor Parlov](http://www.7-zip.org/) for the lzmaDecoder
+You can use the following the command to generate Ninja files for your compiler:
 
-For more information check the license specific file of each project
+(With GCC as example)
+
+```sh
+# Create and go to the build directory
+mkdir build
+cd build
+
+# Generate ninja files
+cmake -G "Ninja" `
+        -DCMAKE_CXX_COMPILER="g++" `
+        -DCMAKE_C_COMPILER="gcc" `
+        -DCMAKE_BUILD_TYPE="Release" `
+        ../
+
+# To build the project
+ninja all
+```
+
+## Libraries used
+
+UnCSO2 uses the following libraries:
+
+- [GSL Lite](https://github.com/martinmoene/gsl-lite), MIT license.
+- [Breeze Icon Theme](https://cgit.kde.org/breeze-icons.git/), LGPL.
+
+libuncso2 also depends on libraries, see [libuncso2's used libraries](https://github.com/L-Leite/libuncso2/blob/master/README.md#libraries-used) for more information.
+
+## License
+
+UnCSO2 is distributed under the GNU GPLv3 license.
+
+In the previous 1.* versions, UnCSO2 is distributed under the MIT license.
