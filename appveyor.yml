@@ -1,0 +1,61 @@
+version: 2.0.0-{build}
+pull_requests:
+  do_not_increment_build_number: true
+
+image:
+  - Visual Studio 2017
+  - Ubuntu1604
+
+environment:
+  matrix:
+    - BUILD_COMBO: windows-mingw
+    - BUILD_COMBO: windows-msvc
+    - BUILD_COMBO: linux-gcc    
+    - BUILD_COMBO: linux-clang
+
+matrix:
+  exclude:
+    - image: Visual Studio 2017
+      BUILD_COMBO: linux-gcc
+    - image: Visual Studio 2017
+      BUILD_COMBO: linux-clang
+    - image: Ubuntu1604
+      BUILD_COMBO: windows-mingw
+    - image: Ubuntu1604
+      BUILD_COMBO: windows-msvc
+
+
+configuration:
+  - Debug
+  - Release
+
+install:
+  - ps: ./ci/setup.ps1
+
+build_script:
+  - ps: ./ci/build.ps1
+
+after_build:
+  - ps: ./ci/pack.ps1
+
+artifacts:
+- path: build/UnCSO2-*-win64.7z
+  name: win_binaries
+- path: 'build/package/UnCSO2-*-x86_64.AppImage'
+  name: linux_binaries
+
+deploy:
+- provider: GitHub
+  release: $(LAUNCHER_VERSION)
+  auth_token:
+    secure: XnUsE3jqzulQ4cWVkK2ALBR7qfnfwbBdoMDChmcnx1RcGtRgXV0QLMPo+GcIf8YU
+  artifact: win_binaries,linux_binaries
+  on:
+    branch: master
+    APPVEYOR_REPO_TAG: true
+    configuration: Release
+
+on_finish:
+  - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
+  - sh: export APPVEYOR_SSH_BLOCK=true
+  - sh: curl -sflL 'https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-ssh.sh' | bash -e -
