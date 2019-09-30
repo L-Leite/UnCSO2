@@ -6,6 +6,12 @@ function CreateDirectory {
 $curBuildCombo = $env:BUILD_COMBO
 $curConfig = $env:CONFIGURATION
 
+# only package on Release builds, but don't error out
+if ($curConfig -ne 'Release') {
+    Write-Host 'Non release build detected, exiting packaging script...'
+    exit 0
+}
+
 $isMingwBuild = $curBuildCombo -eq 'windows-mingw'
 $isMsvcBuild = $curBuildCombo -eq 'windows-msvc'
 
