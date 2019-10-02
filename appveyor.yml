@@ -30,8 +30,8 @@ configuration:
   - Release
 
 install:
-  - sh: source /opt/qt512/bin/qt512-env.sh
   - ps: ./ci/setup.ps1
+  - sh: source /opt/qt512/bin/qt512-env.sh
 
 build_script:
   - ps: ./ci/build.ps1
