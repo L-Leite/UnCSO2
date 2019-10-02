@@ -8,21 +8,21 @@ image:
 
 environment:
   matrix:
-    - BUILD_COMBO: windows-mingw
-    - BUILD_COMBO: windows-msvc
     - BUILD_COMBO: linux-gcc    
     - BUILD_COMBO: linux-clang
+    - BUILD_COMBO: windows-mingw
+    - BUILD_COMBO: windows-msvc
 
 matrix:
   exclude:
-    - image: Visual Studio 2017
-      BUILD_COMBO: linux-gcc
-    - image: Visual Studio 2017
-      BUILD_COMBO: linux-clang
     - image: Ubuntu1604
       BUILD_COMBO: windows-mingw
     - image: Ubuntu1604
       BUILD_COMBO: windows-msvc
+    - image: Visual Studio 2017
+      BUILD_COMBO: linux-gcc
+    - image: Visual Studio 2017
+      BUILD_COMBO: linux-clang
 
 
 configuration:
@@ -30,6 +30,7 @@ configuration:
   - Release
 
 install:
+  - sh: source /opt/qt512/bin/qt512-env.sh
   - ps: ./ci/setup.ps1
 
 build_script:
