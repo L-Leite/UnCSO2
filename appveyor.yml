@@ -3,8 +3,8 @@ pull_requests:
   do_not_increment_build_number: true
 
 image:
-  - Visual Studio 2017
   - Ubuntu1604
+  - Visual Studio 2017
 
 environment:
   matrix:
