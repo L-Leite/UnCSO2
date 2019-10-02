@@ -6,11 +6,11 @@ function SetupVsToolsPath {
     Push-Location '.\Community\VC\Auxiliary\Build'
 
     cmd /c "vcvars64.bat&set" |
-        ForEach-Object {
-            if ($_ -match "=") {
-                $v = $_.split("="); set-item -force -path "ENV:\$($v[0])"  -value "$($v[1])"
-            }
+    ForEach-Object {
+        if ($_ -match "=") {
+            $v = $_.split("="); set-item -force -path "ENV:\$($v[0])"  -value "$($v[1])"
         }
+    }
 
     Pop-Location
     Pop-Location
@@ -84,7 +84,7 @@ if ($isLinux) {
     # install qt
     sudo add-apt-repository "ppa:beineri/opt-qt-5.12.3-xenial"
     sudo apt-get update
-    sudo apt install qt512base qt512svg
+    sudo apt install -y qt512base qt512svg
 
     if ($isLinuxClangBuild) {
         # retrieve clang 8
