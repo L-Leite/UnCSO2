@@ -32,6 +32,10 @@ if ($isLinux) {
 
     # copy AppImage prebuilt files
     Copy-Item ./appimage/* -Destination ./build/package/
+    
+    # copy uncso2 itself to the package dir
+    Copy-Item ./build/uc2 -Destination ./build/package/
+
 }
 elseif ($isWindows) {
     if ($isMingwBuild) {
@@ -41,17 +45,23 @@ elseif ($isWindows) {
     
     # copy libuncso2 to the package dir
     Copy-Item ./build/libuncso2/*uncso2.dll -Destination ./build/package/
+    
+    # copy uncso2 itself to the package dir
+    Copy-Item ./build/uc2.exe -Destination ./build/package/
 }
 else {
     Write-Error 'An unknown OS is running this script, implement me.'
     exit 1
 }
-    
-# copy uncso2 itself to the package dir
-Copy-Item ./build/uc2* -Destination ./build/package/
 
 # copy breeze icons
 Copy-Item ./build/icons-breeze.rcc -Destination ./build/package/
+
+# copy license
+Copy-Item ./COPYING -Destination ./build/package/
+
+# copy README
+Copy-Item ./README.md -Destination ./build/package/
 
 # get app version
 $versionStr = Get-Content -Path ./version.txt -TotalCount 1
