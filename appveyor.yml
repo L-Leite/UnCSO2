@@ -37,19 +37,24 @@ build_script:
 
 after_build:
   - ps: ./ci/pack.ps1
+  - ps: $env:VERSION_STR = Get-Content -Path ./version.txt -TotalCount 1
 
 artifacts:
-- path: build/UnCSO2-*-win64.7z
-  name: win_binaries
-- path: 'build/package/UnCSO2-*-x86_64.AppImage'
-  name: linux_binaries
+- path: build/UnCSO2-*-win64_mingw.7z
+  name: mingw_binaries
+- path: build/UnCSO2-*-win64_msvc.7z
+  name: msvc_binaries
+- path: 'build/package/UnCSO2-*-linux64_gcc.AppImage'
+  name: gcc_binaries
+- path: 'build/package/UnCSO2-*-linux64_clang.AppImage'
+  name: linuxclang_binaries
 
 deploy:
 - provider: GitHub
-  release: $(LAUNCHER_VERSION)
+  release: Version $(VERSION_STR)
   auth_token:
     secure: XnUsE3jqzulQ4cWVkK2ALBR7qfnfwbBdoMDChmcnx1RcGtRgXV0QLMPo+GcIf8YU
-  artifact: win_binaries,linux_binaries
+  artifact: mingw_binaries,msvc_binaries,gcc_binaries,linuxclang_binaries
   on:
     branch: master
     APPVEYOR_REPO_TAG: true

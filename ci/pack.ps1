@@ -12,6 +12,8 @@ if ($curConfig -ne 'Release') {
     exit 0
 }
 
+$isGccBuild = $curBuildCombo -eq 'linux-gcc'
+$isLinuxClangBuild = $curBuildCombo -eq 'linux-clang'
 $isMingwBuild = $curBuildCombo -eq 'windows-mingw'
 $isMsvcBuild = $curBuildCombo -eq 'windows-msvc'
 
@@ -30,34 +32,23 @@ if ($isLinux) {
 
     # copy AppImage prebuilt files
     Copy-Item ./appimage/* -Destination ./build/package/
-
-    # copy uncso2 itself to the package dir
-    Copy-Item ./build/uc2 ./build/package/
 }
 elseif ($isWindows) {
     if ($isMingwBuild) {
-        # copy libcryptopp to the same directory of uc2
-        cp ./build/libuncso2/libuncso2.dll ./build/package/
-
-        # copy libuncso2 to the same directory of uc2
-        cp ./build/libuncso2/external/cryptopp/libcryptopp.dll ./build/package/
-    }
-    elseif ($isMsvcBuild) {
-        # copy libcryptopp to the same directory of uc2
-        cp ./build/libuncso2/uncso2.dll ./build/package/
-    }
-    else {        
-        Write-Error 'Unknown build combo detected.'
-        exit 1
+        # copy crypto++ to the package dir
+        Copy-Item ./build/libuncso2/external/cryptopp/libcryptopp.dll -Destination ./build/package/
     }
     
-    # copy uncso2 itself to the package dir
-    Copy-Item ./build/uc2.exe ./build/package/
+    # copy libuncso2 to the package dir
+    Copy-Item ./build/libuncso2/*uncso2.dll -Destination ./build/package/
 }
 else {
     Write-Error 'An unknown OS is running this script, implement me.'
     exit 1
 }
+    
+# copy uncso2 itself to the package dir
+Copy-Item ./build/uc2* -Destination ./build/package/
 
 # copy breeze icons
 Copy-Item ./build/icons-breeze.rcc -Destination ./build/package/
@@ -75,7 +66,16 @@ if ($isLinux) {
     chmod a+x linuxdeployqt-continuous-x86_64.AppImage
 
     $env:VERSION = $versionStr;
-    ./linuxdeployqt-continuous-x86_64.AppImage ./uc2 -bundle-non-qt-libs -appimage
+    ./linuxdeployqt-continuous-x86_64.AppImage ./uc2 -bundle-non-qt-libs "-extra-plugins=iconengines,platformthemes" -appimage
+
+    if ($isGccBuild) {
+        Move-Item *.AppImage -Destination "UnCSO2-$versionStr-linux64_gcc.AppImage"
+    }
+    elseif ($isLinuxClangBuild) {
+        Move-Item *.AppImage -Destination "UnCSO2-$versionStr-linux64_clang.AppImage"
+    }
+
+    Pop-Location
 }
 elseif ($isWindows) {
     $windeployBin = ''
@@ -96,13 +96,16 @@ elseif ($isWindows) {
     }
     else {       
         & $windeployBin ./uc2.exe  
-    }  
-}
+    }
 
-Pop-Location
+    Pop-Location
 
-if ($isWindows) {
-    7z a -t7z -m0=lzma2 -mx=9 -mfb=64 -md=64m -ms=on "UnCSO2-$versionStr-win64.7z" ./package/*
+    if ($isMingwBuild) {       
+        7z a -t7z -m0=lzma2 -mx=9 -mfb=64 -md=64m -ms=on "UnCSO2-$versionStr-win64_mingw.7z" ./package/*
+    }
+    elseif ($isMsvcBuild) {       
+        7z a -t7z -m0=lzma2 -mx=9 -mfb=64 -md=64m -ms=on "UnCSO2-$versionStr-win64_msvc.7z" ./package/*
+    }
 }
 
 Pop-Location
