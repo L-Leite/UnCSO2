@@ -31,7 +31,7 @@ private:
     bool TrySpecificProvider( GameProvider provider );
 
     static std::pair<bool, GameProvider> TestCsKeys(
-        uc2::PkgFile* pPkgFile, const std::vector<uint8_t>& vPkgFileData );
+        uc2::PkgFile* pPkgFile, std::vector<uint8_t>& vPkgFileData );
     static bool TestTfoKeys( uc2::PkgFile* pPkgFile );
 
 private:

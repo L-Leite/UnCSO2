@@ -184,7 +184,7 @@ bool DynamicPkgFileFactory::TrySpecificProvider( GameProvider provider )
 }
 
 std::pair<bool, GameProvider> DynamicPkgFileFactory::TestCsKeys(
-    uc2::PkgFile* pPkgFile, const std::vector<uint8_t>& vPkgFileData )
+    uc2::PkgFile* pPkgFile, std::vector<uint8_t>& vPkgFileData )
 {
     std::vector<uint8_t> vBackupPkgData = vPkgFileData;
 
@@ -201,7 +201,7 @@ std::pair<bool, GameProvider> DynamicPkgFileFactory::TestCsKeys(
                          GetGameProviderByIndex( gsl::narrow_cast<int>( i ) ) };
             }
 
-            vBackupPkgData = vPkgFileData;
+            vPkgFileData = vBackupPkgData;
         }
         catch ( const std::exception& e )
         {
