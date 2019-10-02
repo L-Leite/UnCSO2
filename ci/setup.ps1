@@ -6,11 +6,11 @@ function SetupVsToolsPath {
     Push-Location '.\Community\VC\Auxiliary\Build'
 
     cmd /c "vcvars64.bat&set" |
-    ForEach-Object {
-        if ($_ -match "=") {
-            $v = $_.split("="); set-item -force -path "ENV:\$($v[0])"  -value "$($v[1])"
+        ForEach-Object {
+            if ($_ -match "=") {
+                $v = $_.split("="); set-item -force -path "ENV:\$($v[0])"  -value "$($v[1])"
+            }
         }
-    }
 
     Pop-Location
     Pop-Location
@@ -84,7 +84,7 @@ if ($isLinux) {
     # install qt
     sudo add-apt-repository "ppa:beineri/opt-qt-5.12.3-xenial"
     sudo apt-get update
-    sudo apt qt512base qt512svg
+    sudo apt install qt512base qt512svg
 
     if ($isLinuxClangBuild) {
         # retrieve clang 8
@@ -107,7 +107,7 @@ elseif ($isWindows) {
         [Environment]::SetEnvironmentVariable("Path", $env:Path + $mingwAppendPath, "Machine")
 
         # put Qt in CMake prefix path
-        $mingwPrefixPath = 'C:\Qt\5.13.0\mingw73_64'
+        $mingwPrefixPath = 'C:\Qt\5.13\mingw73_64'
         $env:CMAKE_PREFIX_PATH += $mingwPrefixPath
         [Environment]::SetEnvironmentVariable("CMAKE_PREFIX_PATH", $mingwPrefixPath, "Machine")
     }
@@ -117,7 +117,7 @@ elseif ($isWindows) {
         SetupVsToolsPath
 
         # put Qt in CMake prefix path
-        $msvcPrefixPath = 'C:\Qt\5.13.0\msvc2017_64'
+        $msvcPrefixPath = 'C:\Qt\5.13\msvc2017_64'
         $env:CMAKE_PREFIX_PATH += $msvcPrefixPath
         [Environment]::SetEnvironmentVariable("CMAKE_PREFIX_PATH", $msvcPrefixPath, "Machine")
     }
