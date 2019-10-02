@@ -8,7 +8,7 @@ A file data extractor for the videogames Counter Strike: Online 2 and Titanfall 
 
 It uses ekey's reversing work published at [XeNTaX's forums](https://forum.xentax.com/viewtopic.php?f=21&t=11117).
 
-The program layout is based off KDE's Ark.
+This program's layout is based off KDE's Ark.
 
 It uses [libuncso2](https://github.com/L-Leite/libuncso2) as the back-end library.
 
