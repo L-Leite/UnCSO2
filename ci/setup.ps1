@@ -79,7 +79,10 @@ Write-Host "Current setup build combo is: $curBuildCombo"
 
 if ($isLinux) {
     # install ninja through apt
-    sudo apt install ninja-build
+    sudo apt install -y ninja-build
+
+    # install GL libs required by qt
+    sudo apt install -y libgl1-mesa-dev mesa-common-dev
 
     # install qt
     sudo add-apt-repository "ppa:beineri/opt-qt-5.12.3-xenial"
