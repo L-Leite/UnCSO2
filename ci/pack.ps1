@@ -76,7 +76,7 @@ if ($isLinux) {
     chmod a+x linuxdeployqt-continuous-x86_64.AppImage
 
     $env:VERSION = $versionStr;
-    ./linuxdeployqt-continuous-x86_64.AppImage ./uc2 -bundle-non-qt-libs "-extra-plugins=iconengines,platformthemes" -appimage
+    ./linuxdeployqt-continuous-x86_64.AppImage ./uc2 -bundle-non-qt-libs "-extra-plugins=iconengines,platformthemes,styles" -appimage
 
     if ($isGccBuild) {
         Move-Item *.AppImage -Destination "UnCSO2-$versionStr-linux64_gcc.AppImage"
