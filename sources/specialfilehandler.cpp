@@ -67,7 +67,7 @@ gsl::span<std::uint8_t> SpecialFileHandler::DecryptFile()
     }
     catch ( const std::exception& e )
     {
-        qDebug( e.what() );
+        qDebug() << e.what();
     }
 
     return {};
@@ -89,12 +89,12 @@ gsl::span<std::uint8_t> SpecialFileHandler::DecompressTexture() const
         }
         else
         {
-            delete pNewTexBuffer;
+            delete[] pNewTexBuffer;
         }
     }
     catch ( const std::exception& e )
     {
-        qDebug( e.what() );
+        qDebug() << e.what();
     }
 
     return {};
