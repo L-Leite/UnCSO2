@@ -55,7 +55,7 @@ deploy:
   release: Version $(VERSION_STR)
   auth_token:
     secure: XnUsE3jqzulQ4cWVkK2ALBR7qfnfwbBdoMDChmcnx1RcGtRgXV0QLMPo+GcIf8YU
-  artifact: mingw_binaries,msvc_binaries,gcc_binaries,linuxclang_binaries
+  artifact: mingw_binaries,gcc_binaries
   on:
     branch: master
     APPVEYOR_REPO_TAG: true
