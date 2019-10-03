@@ -35,7 +35,8 @@ std::pair<bool, std::vector<uint8_t>> ReadFileToBuffer(
     std::vector<uint8_t> res( readLength );
 
     is.seekg( std::ios::beg );
-    is.read( reinterpret_cast<char*>( res.data() ), readLength );
+    is.read( reinterpret_cast<char*>( res.data() ),
+             gsl::narrow_cast<std::streamsize>( readLength ) );
 
     return { true, std::move( res ) };
 }
@@ -49,7 +50,8 @@ bool WriteBufferToFile( const fs::path& filePath, gsl::span<uint8_t> buff )
         return false;
     }
 
-    os.write( reinterpret_cast<char*>( buff.data() ), buff.size_bytes() );
+    os.write( reinterpret_cast<char*>( buff.data() ),
+              gsl::narrow_cast<std::streamsize>( buff.size_bytes() ) );
 
     return true;
 }
