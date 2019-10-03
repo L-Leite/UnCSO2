@@ -5,7 +5,7 @@
 #include <uc2/encryptedfile.hpp>
 #include <uc2/lzmatexture.hpp>
 
-#include <qlogging.h>
+#include <QDebug>
 
 #include "indexkeycollections.hpp"
 #include "miscutils.hpp"
