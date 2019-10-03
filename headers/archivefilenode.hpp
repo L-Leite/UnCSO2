@@ -27,8 +27,8 @@ public:
 
     virtual bool IsDirectory() const override;
 
-    virtual bool IsCompressedTexture() const;
-    virtual bool IsFileEncrypted() const;
+    virtual bool IsCompressedTexture() const override;
+    virtual bool IsFileEncrypted() const override;
 
     inline uc2::PkgEntry* GetPkgEntry() const;
 
