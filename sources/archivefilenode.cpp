@@ -1,6 +1,9 @@
 #include "archivefilenode.hpp"
 
 #include <QLocale>
+
+#include <gsl/gsl>
+
 #include <string>
 
 #include <uc2/pkgentry.hpp>
@@ -33,7 +36,7 @@ QVariant ArchiveFileNode::GetData( int column )
             return this->GetFileTypeColumnString();
         case PFS_SizeColumn:
             return QLocale::system().formattedDataSize(
-                this->GetDecryptedSize() );
+                gsl::narrow_cast<qint64>( this->GetDecryptedSize() ) );
         case PFS_FlagsColumn:
             return this->BuildFlagsString();
         case PFS_OwnerPkgColumn:

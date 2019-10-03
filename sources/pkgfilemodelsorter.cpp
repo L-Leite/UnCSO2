@@ -1,5 +1,7 @@
 #include "pkgfilemodelsorter.hpp"
 
+#include <gsl/gsl>
+
 #include "archivefilenode.hpp"
 
 PkgFileModelSorter::PkgFileModelSorter( int column ) : m_iSortColumn( column )
@@ -78,7 +80,9 @@ bool PkgFileModelSorter::CompareByType( const ArchiveBaseNode* l,
 bool PkgFileModelSorter::CompareBySize( const ArchiveBaseNode* l,
                                         const ArchiveBaseNode* r ) const
 {
-    int64_t sizeDifference = l->GetDecryptedSize() - r->GetDecryptedSize();
+    int64_t sizeDifference =
+        gsl::narrow_cast<int64_t>( l->GetDecryptedSize() ) -
+        gsl::narrow_cast<int64_t>( r->GetDecryptedSize() );
 
     // Fall back to name ordering if the files are of the same size
     if ( sizeDifference == 0 )

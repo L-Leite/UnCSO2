@@ -167,7 +167,8 @@ QModelIndex PkgFileModel::index( int row, int column,
     const int iChildVisRow = this->translateVisibleLocation(
         const_cast<ArchiveDirectoryNode*>( pParentNode ), row );
 
-    ArchiveBaseNode* pChildNode = pParentNode->GetChild( iChildVisRow );
+    ArchiveBaseNode* pChildNode =
+        pParentNode->GetChild( gsl::narrow_cast<std::size_t>( iChildVisRow ) );
 
     if ( pChildNode )
         return this->createIndex( row, column, pChildNode );
@@ -263,7 +264,7 @@ std::vector<std::pair<ArchiveBaseNode*, int>> PkgFileModel::GrabOldNodes(
     std::vector<std::pair<ArchiveBaseNode*, int>> oldNodes;
 
     const int nodeCount = oldList.count();
-    oldNodes.reserve( nodeCount );
+    oldNodes.reserve( gsl::narrow_cast<std::size_t>( nodeCount ) );
 
     for ( int i = 0; i < nodeCount; i++ )
     {

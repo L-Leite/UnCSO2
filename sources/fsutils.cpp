@@ -1,8 +1,9 @@
 #include "fsutils.hpp"
 
 #include <fstream>
-
 #include <iostream>
+
+#include <gsl/gsl>
 
 std::pair<bool, std::vector<uint8_t>> ReadFileToBuffer(
     const fs::path& filePath, uint64_t readLength /*= 0*/ )
@@ -19,7 +20,7 @@ std::pair<bool, std::vector<uint8_t>> ReadFileToBuffer(
         return { false, {} };
     }
 
-    uint64_t iFileSize = is.tellg();
+    const uint64_t iFileSize = gsl::narrow_cast<uint64_t>( is.tellg() );
 
     if ( readLength == 0 )
     {
