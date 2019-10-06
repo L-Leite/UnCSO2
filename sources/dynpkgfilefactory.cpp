@@ -170,9 +170,20 @@ bool DynamicPkgFileFactory::TrySpecificProvider( GameProvider provider )
     auto [entryKey, dataKey] =
         GetPackageKeysByProvider( this->m_DetectedProvider );
 
+    const bool bIsTfoPkg = provider == GameProvider::Tfo;
+
+    uc2::PkgFileOptions::ptr_t pOptions;
+
+    if ( bIsTfoPkg == true )
+    {
+        pOptions = uc2::PkgFileOptions::Create();
+        pOptions->SetTfoPkg( true );
+    }
+
     this->m_pPkgFile = uc2::PkgFile::Create(
         this->m_PkgFilePath.filename().generic_string(), this->m_vPkgFileData,
-        CopyViewToNewStr( entryKey ), CopyViewToNewStr( dataKey ) );
+        CopyViewToNewStr( entryKey ), CopyViewToNewStr( dataKey ),
+        pOptions.get() );
 
     if ( this->m_pPkgFile->DecryptHeader() == false )
     {
