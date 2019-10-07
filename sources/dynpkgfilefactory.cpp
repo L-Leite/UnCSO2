@@ -119,10 +119,10 @@ bool DynamicPkgFileFactory::LoadBaseFileHeader()
 
 bool DynamicPkgFileFactory::LoadFullFileHeader()
 {
-    // const uint64_t iFullHeaderSize = this->m_pPkgFile->GetFullHeaderSize();
+    const uint64_t iFullHeaderSize = this->m_pPkgFile->GetFullHeaderSize();
 
     auto [bPkgRead, vPkgData] =
-        ReadFileToBuffer( this->m_PkgFilePath /*, iFullHeaderSize */ );
+        ReadFileToBuffer( this->m_PkgFilePath, iFullHeaderSize );
 
     if ( bPkgRead == false )
     {

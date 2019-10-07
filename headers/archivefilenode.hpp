@@ -15,7 +15,6 @@ class ArchiveFileNode : public ArchiveBaseNode
 {
 public:
     ArchiveFileNode( const fs::path& ownerPkgPath, uc2::PkgEntry* pPkgEntry,
-                     bool isCompressedTex, bool isEncrypted,
                      ArchiveDirectoryNode* pParentNode = nullptr );
     virtual ~ArchiveFileNode();
 
@@ -27,14 +26,10 @@ public:
 
     virtual bool IsDirectory() const override;
 
-    virtual bool IsCompressedTexture() const override;
-    virtual bool IsFileEncrypted() const override;
-
     inline uc2::PkgEntry* GetPkgEntry() const;
 
 private:
     QString GetFileTypeColumnString() const;
-    QString BuildFlagsString() const;
 
 private:
     std::string m_szOwnerPkgFilename;
@@ -42,9 +37,6 @@ private:
     uc2::PkgEntry* m_pPkgEntry;
 
     uint64_t m_iDecryptedSize;
-
-    bool m_bIsCompressedTexture;
-    bool m_bIsFileEncrypted;
 };
 
 inline uc2::PkgEntry* ArchiveFileNode::GetPkgEntry() const
