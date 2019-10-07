@@ -99,8 +99,6 @@ QVariant ArchiveDirectoryNode::GetData( int column )
             return tr( "Directory" );
         case PFS_SizeColumn:
             return {};
-        case PFS_FlagsColumn:
-            return {};
         case PFS_OwnerPkgColumn:
             return {};
     }
@@ -127,16 +125,6 @@ uint64_t ArchiveDirectoryNode::GetDecryptedSize() const
 bool ArchiveDirectoryNode::IsDirectory() const
 {
     return true;
-}
-
-bool ArchiveDirectoryNode::IsCompressedTexture() const
-{
-    return false;
-}
-
-bool ArchiveDirectoryNode::IsFileEncrypted() const
-{
-    return false;
 }
 
 std::set<std::string_view> ArchiveDirectoryNode::GetChildrenPkgOwners() const

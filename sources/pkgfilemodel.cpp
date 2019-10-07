@@ -10,7 +10,6 @@
 
 #include "dynindexfilefactory.hpp"
 #include "dynpkgfilefactory.hpp"
-#include "entryflagdetection.hpp"
 #include "fsutils.hpp"
 #include "miscutils.hpp"
 #include "nodeextractionmgr.hpp"
@@ -136,8 +135,6 @@ QVariant PkgFileModel::headerData( int section, Qt::Orientation orientation,
                         return tr( "Type" );
                     case PFS_SizeColumn:
                         return tr( "Size" );
-                    case PFS_FlagsColumn:
-                        return tr( "Flags" );
                     case PFS_OwnerPkgColumn:
                         return tr( "Owning PKG" );
                 }
@@ -633,14 +630,8 @@ void PkgFileModel::CreateChildren(
 
     for ( auto&& pEntry : pEntries )
     {
-        const EntryFlagDetection flagDet( pEntry.get() );
-
-        const bool bIsEncryptedFile = flagDet.IsEncryptedFile();
-        const bool bIsLzmaTexture = flagDet.IsLzmaTexture();
-
-        pParent->AddChild( new ArchiveFileNode( pkgPath, pEntry.get(),
-                                                bIsLzmaTexture,
-                                                bIsEncryptedFile, pParent ) );
+        pParent->AddChild(
+            new ArchiveFileNode( pkgPath, pEntry.get(), pParent ) );
     }
 }
 

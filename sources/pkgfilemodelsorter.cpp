@@ -37,10 +37,6 @@ bool PkgFileModelSorter::CompareNodes( const ArchiveBaseNode* l,
         {
             return this->CompareBySize( l, r );
         }
-        case PFS_FlagsColumn:
-        {
-            return this->CompareByFlags( l, r );
-        }
         case PFS_OwnerPkgColumn:
         {
             return this->CompareByOwnerPkg( l, r );
@@ -91,35 +87,6 @@ bool PkgFileModelSorter::CompareBySize( const ArchiveBaseNode* l,
     }
 
     return sizeDifference < 0;
-}
-
-bool PkgFileModelSorter::CompareByFlags( const ArchiveBaseNode* l,
-                                         const ArchiveBaseNode* r ) const
-{
-    auto flagsCountFunctor = []( const ArchiveBaseNode* n ) {
-        int count = 0;
-
-        if ( n->IsCompressedTexture() == true )
-        {
-            count++;
-        }
-        if ( n->IsFileEncrypted() == true )
-        {
-            count++;
-        }
-
-        return count;
-    };
-
-    int difference = flagsCountFunctor( r ) - flagsCountFunctor( l );
-
-    // Fall back to name ordering if there's no flag difference
-    if ( difference == 0 )
-    {
-        return this->CompareByName( l, r );
-    }
-
-    return difference < 0;
 }
 
 bool PkgFileModelSorter::CompareByOwnerPkg( const ArchiveBaseNode* l,

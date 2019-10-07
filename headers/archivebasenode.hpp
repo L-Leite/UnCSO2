@@ -33,9 +33,6 @@ public:
 
     virtual bool IsDirectory() const = 0;
 
-    virtual bool IsCompressedTexture() const = 0;
-    virtual bool IsFileEncrypted() const = 0;
-
 protected:
     ArchiveDirectoryNode* m_pParentNode;
 

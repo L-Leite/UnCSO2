@@ -33,6 +33,8 @@ bool DynamicIndexFileFactory::TryDetectProvider()
 
     this->m_pPkgIndex = uc2::PkgIndex::Create( szFilename, this->m_vIndexData );
 
+    std::vector<uint8_t> vBackupData = this->m_vIndexData;
+
     bool bDetected =
         DynamicIndexFileFactory::TestCsKeys( this->m_pPkgIndex.get() );
 
@@ -40,6 +42,8 @@ bool DynamicIndexFileFactory::TryDetectProvider()
     {
         return true;
     }
+
+    this->m_vIndexData = vBackupData;
 
     bDetected = DynamicIndexFileFactory::TestTfoKeys( this->m_pPkgIndex.get() );
 

@@ -12,14 +12,11 @@
 
 ArchiveFileNode::ArchiveFileNode(
     const fs::path& ownerPkgPath, uc2::PkgEntry* pPkgEntry,
-    bool isCompressedTex, bool isEncrypted,
     ArchiveDirectoryNode* pParentNode /*= nullptr*/ )
     : ArchiveBaseNode( pPkgEntry->GetFilePath(), pParentNode ),
       m_szOwnerPkgFilename( ownerPkgPath.filename().generic_string() ),
       m_pPkgEntry( pPkgEntry ),
-      m_iDecryptedSize( pPkgEntry->GetDecryptedSize() ),
-      m_bIsCompressedTexture( isCompressedTex ),
-      m_bIsFileEncrypted( isEncrypted )
+      m_iDecryptedSize( pPkgEntry->GetDecryptedSize() )
 {
 }
 
@@ -37,8 +34,6 @@ QVariant ArchiveFileNode::GetData( int column )
         case PFS_SizeColumn:
             return QLocale::system().formattedDataSize(
                 gsl::narrow_cast<qint64>( this->GetDecryptedSize() ) );
-        case PFS_FlagsColumn:
-            return this->BuildFlagsString();
         case PFS_OwnerPkgColumn:
             return QString( this->GetOwnerPkgFilename().data() );
     }
@@ -61,40 +56,8 @@ bool ArchiveFileNode::IsDirectory() const
     return false;
 }
 
-bool ArchiveFileNode::IsCompressedTexture() const
-{
-    return this->m_bIsCompressedTexture;
-}
-
-bool ArchiveFileNode::IsFileEncrypted() const
-{
-    return this->m_bIsFileEncrypted;
-}
-
 QString ArchiveFileNode::GetFileTypeColumnString() const
 {
     QString typeFmt( tr( "%1 file" ) );
     return typeFmt.arg( this->GetPath().extension().c_str() );
-}
-
-QString ArchiveFileNode::BuildFlagsString() const
-{
-    QString szFlags;
-
-    if ( this->m_bIsCompressedTexture == true )
-    {
-        szFlags = tr( "Compressed texture" );
-    }
-
-    if ( this->m_bIsFileEncrypted == true )
-    {
-        if ( szFlags.isEmpty() == false )
-        {
-            szFlags += tr( ", " );
-        }
-
-        szFlags += tr( "Encrypted file" );
-    }
-
-    return szFlags;
 }

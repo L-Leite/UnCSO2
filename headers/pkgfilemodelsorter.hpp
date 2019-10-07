@@ -27,8 +27,6 @@ protected:
                         const ArchiveBaseNode* r ) const;
     bool CompareBySize( const ArchiveBaseNode* l,
                         const ArchiveBaseNode* r ) const;
-    bool CompareByFlags( const ArchiveBaseNode* l,
-                         const ArchiveBaseNode* r ) const;
     bool CompareByOwnerPkg( const ArchiveBaseNode* l,
                             const ArchiveBaseNode* r ) const;
 
