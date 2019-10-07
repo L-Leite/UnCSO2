@@ -513,6 +513,7 @@ void CMainWindow::ValidateLastDirs()
 void CMainWindow::LoadSettings()
 {
     QSettings settings;
+    settings.setDefaultFormat( QSettings::IniFormat );
 
     settings.beginGroup( QStringLiteral( "mainwindow" ) );
     this->setGeometry(
@@ -548,6 +549,7 @@ void CMainWindow::PostLoadSettings()
 void CMainWindow::SaveSettings()
 {
     QSettings settings;
+    settings.setDefaultFormat( QSettings::IniFormat );
 
     settings.beginGroup( QStringLiteral( "mainwindow" ) );
     settings.setValue( QStringLiteral( "geometry" ), this->geometry() );
