@@ -57,7 +57,6 @@ deploy:
     secure: XnUsE3jqzulQ4cWVkK2ALBR7qfnfwbBdoMDChmcnx1RcGtRgXV0QLMPo+GcIf8YU
   artifact: mingw_binaries,gcc_binaries
   on:
-    branch: master
     APPVEYOR_REPO_TAG: true
     configuration: Release
 
