@@ -1,4 +1,4 @@
-version: 2.0.5-{build}
+version: 2.0.6-{build}
 
 image:
   - Ubuntu2004
@@ -19,8 +19,10 @@ matrix:
       BUILD_COMBO: windows-msvc
     - image: Visual Studio 2019
       BUILD_COMBO: linux-gcc
+      Qt5_DIR: "$HOME/Qt/5.14"
     - image: Visual Studio 2019
       BUILD_COMBO: linux-clang
+      Qt5_DIR: "$HOME/Qt/5.14"
 
 configuration:
   - Debug
