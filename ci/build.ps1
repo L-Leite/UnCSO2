@@ -41,8 +41,8 @@ switch ($curBuildCombo) {
         break
     }
     "linux-clang" {
-        $targetCompilerCC = 'clang-8'
-        $targetCompilerCXX = 'clang++-8'
+        $targetCompilerCC = 'clang-10'
+        $targetCompilerCXX = 'clang++-10'
         $clangFsOption = 'DUNCSO2_USE_CLANG_FSAPI=ON';
         break
     }
@@ -74,7 +74,7 @@ CreateDirectory ./build
 Push-Location ./build
 
 if ($isMsvcBuild) {
-    cmake -G "Visual Studio 15 2017" -A "x64" ../ 
+    cmake -G "Visual Studio 16 2019" -A "x64" ../ 
 }
 else {
     cmake -G "Ninja" `

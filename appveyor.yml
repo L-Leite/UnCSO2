@@ -1,8 +1,8 @@
 version: 2.0.5-{build}
 
 image:
-  - Ubuntu1604
-  - Visual Studio 2017
+  - Ubuntu2004
+  - Visual Studio 2019
 
 environment:
   matrix:
@@ -13,13 +13,13 @@ environment:
 
 matrix:
   exclude:
-    - image: Ubuntu1604
+    - image: Ubuntu2004
       BUILD_COMBO: windows-mingw
-    - image: Ubuntu1604
+    - image: Ubuntu2004
       BUILD_COMBO: windows-msvc
-    - image: Visual Studio 2017
+    - image: Visual Studio 2019
       BUILD_COMBO: linux-gcc
-    - image: Visual Studio 2017
+    - image: Visual Studio 2019
       BUILD_COMBO: linux-clang
 
 configuration:
@@ -28,7 +28,7 @@ configuration:
 
 install:
   - ps: ./ci/setup.ps1
-  - sh: source /opt/qt512/bin/qt512-env.sh
+  #- sh: source /opt/qt512/bin/qt512-env.sh
 
 build_script:
   - ps: ./ci/build.ps1

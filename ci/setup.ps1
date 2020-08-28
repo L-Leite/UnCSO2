@@ -1,18 +1,15 @@
 function SetupVsToolsPath {
     # from https://allen-mack.blogspot.com/2008/03/replace-visual-studio-command-prompt.html
 
-    # split location to shorten the command
-    Push-Location 'C:\Program Files (x86)\Microsoft Visual Studio\2017'
-    Push-Location '.\Community\VC\Auxiliary\Build'
+    Push-Location 'C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build'
 
     cmd /c "vcvars64.bat&set" |
-    ForEach-Object {
-        if ($_ -match "=") {
-            $v = $_.split("="); set-item -force -path "ENV:\$($v[0])"  -value "$($v[1])"
+        ForEach-Object {
+            if ($_ -match "=") {
+                $v = $_.split("="); set-item -force -path "ENV:\$($v[0])"  -value "$($v[1])"
+            }
         }
-    }
 
-    Pop-Location
     Pop-Location
 }
 
@@ -31,9 +28,9 @@ function PrintToolsVersion {
             break
         }
         "linux-clang" {
-            which clang-8
+            which clang-10
             Write-Host '# Clang - GCC/Linux'
-            clang-8 -v
+            clang-10 -v
             break
         }
         "windows-mingw" {
@@ -79,22 +76,22 @@ Write-Host "Current setup build combo is: $curBuildCombo"
 
 if ($isLinux) {
     # install ninja through apt
-    sudo apt install -y ninja-build
+    # sudo apt install -y ninja-build
 
     # install GL libs required by qt
-    sudo apt install -y libgl1-mesa-dev mesa-common-dev
+    # sudo apt install -y libgl1-mesa-dev mesa-common-dev
 
     # install qt
-    sudo add-apt-repository "ppa:beineri/opt-qt-5.12.3-xenial"
-    sudo apt-get update
-    sudo apt install -y qt512base qt512svg
+    # sudo add-apt-repository "ppa:beineri/opt-qt-5.12.3-xenial"
+    # sudo apt-get update
+    # sudo apt install -y qt512base qt512svg
 
-    if ($isLinuxClangBuild) {
-        # retrieve clang 8
-        sudo add-apt-repository "deb http://apt.llvm.org/xenial/ llvm-toolchain-xenial-8 main"
-        sudo apt update
-        sudo apt install -y clang-8 lldb-8 lld-8 libc++-8-dev libc++abi-8-dev
-    }
+    # if ($isLinuxClangBuild) {
+    #     # retrieve clang 8
+    #     sudo add-apt-repository "deb http://apt.llvm.org/xenial/ llvm-toolchain-xenial-8 main"
+    #     sudo apt update
+    #     sudo apt install -y clang-8 lldb-8 lld-8 libc++-8-dev libc++abi-8-dev
+    # }
 }
 elseif ($isWindows) {
     # install scoop
@@ -110,7 +107,7 @@ elseif ($isWindows) {
         [Environment]::SetEnvironmentVariable("Path", $env:Path + $mingwAppendPath, "Machine")
 
         # put Qt in CMake prefix path
-        $mingwPrefixPath = 'C:\Qt\5.13\mingw73_64'
+        $mingwPrefixPath = 'C:\Qt\5.14\mingw73_64'
         $env:CMAKE_PREFIX_PATH += $mingwPrefixPath
         [Environment]::SetEnvironmentVariable("CMAKE_PREFIX_PATH", $mingwPrefixPath, "Machine")
     }
@@ -120,7 +117,7 @@ elseif ($isWindows) {
         SetupVsToolsPath
 
         # put Qt in CMake prefix path
-        $msvcPrefixPath = 'C:\Qt\5.13\msvc2017_64'
+        $msvcPrefixPath = 'C:\Qt\5.14\msvc2017_64'
         $env:CMAKE_PREFIX_PATH += $msvcPrefixPath
         [Environment]::SetEnvironmentVariable("CMAKE_PREFIX_PATH", $msvcPrefixPath, "Machine")
     }

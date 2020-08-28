@@ -91,10 +91,10 @@ elseif ($isWindows) {
     $windeployBin = ''
 
     if ($isMingwBuild) {
-        $windeployBin = 'C:\Qt\5.13\mingw73_64\bin\windeployqt.exe'
+        $windeployBin = 'C:\Qt\5.14\mingw73_64\bin\windeployqt.exe'
     }
     elseif ($isMsvcBuild) {        
-        $windeployBin = 'C:\Qt\5.13\msvc2017_64\bin\windeployqt.exe'
+        $windeployBin = 'C:\Qt\5.14\msvc2017_64\bin\windeployqt.exe'
     }
     else {        
         Write-Error 'Unknown build combo detected.'
