@@ -36,21 +36,19 @@ set(UNCSO2_VERSION_OUT "${UNCSO2_GENERATED_DIR}/uc2_version.hpp")
 set(UNCSO2_GIT_DIR "${CMAKE_SOURCE_DIR}/.git")
 
 include(uc2_version)
-generate_uc2_version(VERSION_FILE
-                     ${UNCSO2_VERSION_FILE}
-                     HEADER_TEMPLATE
-                     ${UNCSO2_VERSION_TEMPLATE}
-                     HEADER_OUT
-                     ${UNCSO2_VERSION_OUT}
-                     GIT_DIR
-                     ${UNCSO2_GIT_DIR})
+generate_uc2_version(
+  VERSION_FILE
+  ${UNCSO2_VERSION_FILE}
+  HEADER_TEMPLATE
+  ${UNCSO2_VERSION_TEMPLATE}
+  HEADER_OUT
+  ${UNCSO2_VERSION_OUT}
+  GIT_DIR
+  ${UNCSO2_GIT_DIR})
 
 if(UNCSO2_USE_LTO)
   include(CheckIPOSupported)
-  check_ipo_supported(RESULT
-                      UNCSO2_IPO_SUPPORTED
-                      OUTPUT
-                      UNCSO2_IPO_ERR)
+  check_ipo_supported(RESULT UNCSO2_IPO_SUPPORTED OUTPUT UNCSO2_IPO_ERR)
 
   if(UNCSO2_IPO_SUPPORTED)
     message(STATUS "UnCSO2: Using Link Time Optimizations")
@@ -58,7 +56,7 @@ if(UNCSO2_USE_LTO)
     message(
       FATAL_ERROR
         "Link time optimization is not supported: <${CMAKE_INTERPROCEDURAL_OPTIMIZATION}>"
-      )
+    )
   endif()
 endif()
 
@@ -66,12 +64,17 @@ endif()
 # find dependencies
 #
 if(UNCSO2_USE_CLANG_FSAPI)
-  set(PKG_USE_CLANG_FSAPI TRUE CACHE BOOL "" FORCE)
+  set(PKG_USE_CLANG_FSAPI
+      TRUE
+      CACHE BOOL "" FORCE)
 endif()
 
 add_subdirectory("libuncso2")
 
-find_package(Qt5 COMPONENTS Widgets REQUIRED)
+find_package(
+  Qt5
+  COMPONENTS Widgets
+  REQUIRED)
 if(WIN32)
   find_package(Qt5 COMPONENTS WinExtras REQUIRED)
 endif()
@@ -151,8 +154,7 @@ set(UNCSO2_RESOURCES "resources/icons-uncso2.qrc")
 set(UNCSO2_RESOURCES_BREEZE "resources/icons-breeze.qrc")
 
 set(UNCSO2_RESOURCES_LAYOUTS
-    "resources/layouts/aboutdialog.ui"
-    "resources/layouts/loadindexdialog.ui"
+    "resources/layouts/aboutdialog.ui" "resources/layouts/loadindexdialog.ui"
     "resources/layouts/mainwindow.ui"
     "resources/layouts/pkgpropertiesdialog.ui")
 
@@ -175,16 +177,17 @@ source_group("Resources Files\\Layouts" FILES ${UNCSO2_RESOURCES_LAYOUTS})
 
 qt5_add_binary_resources(icons-breeze ${UNCSO2_RESOURCES_BREEZE})
 
-file(GLOB
-     UNCSO2_ALL_SOURCES
-     ${UNCSO2_SOURCES_BASE}
-     ${UNCSO2_SOURCES_LAYOUTS}
-     ${UNCSO2_SOURCES_WIDGETS}
-     ${UNCSO2_HEADERS_BASE}
-     ${UNCSO2_HEADERS_LAYOUTS}
-     ${UNCSO2_HEADERS_WIDGETS}
-     ${UNCSO2_RESOURCES_LAYOUTS}
-     ${UNCSO2_RESOURCES_WIN32})
+file(
+  GLOB
+  UNCSO2_ALL_SOURCES
+  ${UNCSO2_SOURCES_BASE}
+  ${UNCSO2_SOURCES_LAYOUTS}
+  ${UNCSO2_SOURCES_WIDGETS}
+  ${UNCSO2_HEADERS_BASE}
+  ${UNCSO2_HEADERS_LAYOUTS}
+  ${UNCSO2_HEADERS_WIDGETS}
+  ${UNCSO2_RESOURCES_LAYOUTS}
+  ${UNCSO2_RESOURCES_WIN32})
 
 qt5_add_resources(UNCSO2_ALL_SOURCES ${UNCSO2_RESOURCES})
 
@@ -210,12 +213,8 @@ add_dependencies(uc2 icons-breeze)
 if(MSVC)
   target_compile_options(uc2 PRIVATE /W4 /WX)
 else()
-  target_compile_options(uc2
-                         PRIVATE -Wall
-                                 -Wextra
-                                 -Wconversion
-                                 -pedantic)
-  target_compile_options(uc2 PRIVATE -g)
+  target_compile_options(uc2 PRIVATE -Wall -Wextra -Wconversion -pedantic)
+  # target_compile_options(uc2 PRIVATE -g)
 endif()
 
 if(UNCSO2_USE_LTO)
