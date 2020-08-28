@@ -71,7 +71,6 @@ void NodeExtractionMgr::AddDirectoryNode( ArchiveDirectoryNode* pDirNode,
 
             fs::path newParentNodePath =
                 parentNodePath / pDirNode->GetPath().filename();
-            qDebug() << newParentNodePath.c_str();
 
             this->AddDirectoryNode( pDirChild, ownerPkgFile,
                                     newParentNodePath );
@@ -83,7 +82,6 @@ void NodeExtractionMgr::AddDirectoryNode( ArchiveDirectoryNode* pDirNode,
 
             fs::path dirPath = parentNodePath;
             dirPath /= pDirNode->GetPath().filename();
-            qDebug() << dirPath.c_str();
 
             this->AddFileNode( pFileChild, ownerPkgFile, dirPath );
         }
@@ -187,8 +185,6 @@ void NodeExtractionMgr::HandleFileNode( ArchiveFileNode* pFileNode,
 
     fs::path fullFilePath = parentDir;
     fullFilePath /= pFileNode->GetPath().filename();
-
-    qDebug() << fullFilePath.c_str();
 
     this->m_vOutNodesData.push_back( { fullFilePath, pFileNode } );
 }
