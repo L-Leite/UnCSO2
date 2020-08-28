@@ -399,3 +399,6 @@ CMakeLists.txt.user*
 
 # CMake build directory
 /build
+
+# appimage executables
+*.AppImage
