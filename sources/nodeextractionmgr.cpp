@@ -196,10 +196,17 @@ bool NodeExtractionMgr::WritePkgEntryInternal( uc2::PkgEntry* pEntry,
                                                bool canDecrypt,
                                                bool canDecompress )
 {
-    auto decryptedBuffer = PairToSpan( pEntry->DecryptFile() );
+    gsl::span<uint8_t> decryptedBuffer;
 
-    if ( decryptedBuffer.empty() == true )
+    try
     {
+        decryptedBuffer = PairToSpan( pEntry->DecryptFile() );
+    }
+    catch ( const std::exception& e )
+    {
+        qCritical() << "Failed to extract file '"
+                    << pEntry->GetFilePath().data() << "' with error '"
+                    << e.what() << "'";
         return false;
     }
 
