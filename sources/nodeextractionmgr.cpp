@@ -113,9 +113,6 @@ bool NodeExtractionMgr::LoadPkgFileData( const fs::path& pkgParentPath,
 
 bool NodeExtractionMgr::WriteNodesToDisk()
 {
-    this->m_ExtractedNodesPaths.clear();
-    this->m_ExtractedNodesPaths.reserve( this->m_vOutNodesData.size() );
-
     for ( auto&& nodePair : this->m_vOutNodesData )
     {
         auto nodePath = nodePair.first;
@@ -131,8 +128,31 @@ bool NodeExtractionMgr::WriteNodesToDisk()
             return false;
         }
 
-        this->m_ExtractedNodesPaths.push_back( targetFilePath );
         this->m_iExtractionProgress++;
+    }
+
+    this->m_vOutNodesData.clear();
+
+    return true;
+}
+
+bool NodeExtractionMgr::WriteSingleNodeToDisk( fs::path& outPath )
+{
+    Q_ASSERT( this->m_vOutNodesData.size() == 1 );
+
+    auto nodePair = this->m_vOutNodesData[0];
+
+    auto nodePath = nodePair.first;
+    auto pFileNode = nodePair.second;
+
+    outPath = this->m_OutPath / nodePath;
+    uc2::PkgEntry* pPkgEntry = pFileNode->GetPkgEntry();
+
+    if ( this->WritePkgEntryInternal( pPkgEntry, outPath,
+                                      this->m_bAllowDecryption,
+                                      this->m_bAllowDecompression ) == false )
+    {
+        return false;
     }
 
     this->m_vOutNodesData.clear();
@@ -383,15 +403,12 @@ bool NodeExtractionMgr::ExtractSingleFileNode( ArchiveFileNode* pFileNode,
         return false;
     }
 
-    const bool bWritten = this->WriteNodesToDisk();
+    const bool bWritten = this->WriteSingleNodeToDisk( outResultPath );
 
     if ( bWritten == false )
     {
         return false;
     }
-
-    Q_ASSERT( this->GetExtractedNodesPaths().size() == 1 );
-    outResultPath = this->GetExtractedNodesPaths().at( 0 );
 
     pPkgFile->ReleaseDataBuffer();
     this->m_vLoadedPkgFile.clear();

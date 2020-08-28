@@ -37,7 +37,6 @@ public:
                           uc2::PkgFile* pkgFile );
 
     inline int GetExtractionProgress() const;
-    inline const std::vector<fs::path>& GetExtractedNodesPaths() const;
 
     // from PkgFileModel
     bool ExtractNodes( const gsl::span<ArchiveBaseNode*> targetNodes,
@@ -62,6 +61,8 @@ private:
                          fs::path parentDir );
 
     bool WriteNodesToDisk();
+    bool WriteSingleNodeToDisk( fs::path& outPath );
+
     bool WritePackageToDisk( uc2::PkgFile* pPkgFile );
     static bool WritePkgEntryInternal( uc2::PkgEntry* pEntry,
                                        fs::path& outFilePath, bool canDecrypt,
@@ -82,7 +83,6 @@ private:
 
     std::vector<std::pair<fs::path, ArchiveFileNode*>> m_vOutNodesData;
 
-    std::vector<fs::path> m_ExtractedNodesPaths;
     int& m_iExtractionProgress;
 
     const bool m_bAllowDecryption;
@@ -102,10 +102,4 @@ inline bool NodeExtractionMgr::HasAnyNodes() const
 inline int NodeExtractionMgr::GetExtractionProgress() const
 {
     return this->m_iExtractionProgress;
-}
-
-inline const std::vector<fs::path>& NodeExtractionMgr::GetExtractedNodesPaths()
-    const
-{
-    return this->m_ExtractedNodesPaths;
 }
