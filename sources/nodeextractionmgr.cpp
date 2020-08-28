@@ -137,6 +137,8 @@ bool NodeExtractionMgr::WriteNodesToDisk()
         this->m_iExtractionProgress++;
     }
 
+    this->m_vOutNodesData.clear();
+
     return true;
 }
 
@@ -327,6 +329,9 @@ bool NodeExtractionMgr::ExtractNodes(
         {
             return false;
         }
+
+        pPkgFile->ReleaseDataBuffer();
+        this->m_vLoadedPkgFile.clear();
     }
 
     return true;
@@ -391,6 +396,9 @@ bool NodeExtractionMgr::ExtractSingleFileNode( ArchiveFileNode* pFileNode,
 
     Q_ASSERT( this->GetExtractedNodesPaths().size() == 1 );
     outResultPath = this->GetExtractedNodesPaths().at( 0 );
+
+    pPkgFile->ReleaseDataBuffer();
+    this->m_vLoadedPkgFile.clear();
 
     return true;
 }
