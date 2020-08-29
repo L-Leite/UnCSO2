@@ -6,24 +6,25 @@ image:
 
 environment:
   matrix:
-    - BUILD_COMBO: linux-gcc    
+    - BUILD_COMBO: linux-gcc
+      Qt5_DIR: "$HOME/Qt/5.14"
     - BUILD_COMBO: linux-clang
+      Qt5_DIR: "$HOME/Qt/5.14"
     - BUILD_COMBO: windows-mingw
+      Qt5_DIR: "C:\\Qt\\5.14\\mingw73_64"
     - BUILD_COMBO: windows-msvc
+      Qt5_DIR: "C:\\Qt\\5.14\\msvc2017"
 
 matrix:
-  - image: Visual Studio 2019
-    BUILD_COMBO: windows-mingw
-    Qt5_DIR: "C:\\Qt\\5.14\\mingw73_64"
-  - image: Visual Studio 2019
-    BUILD_COMBO: windows-msvc
-    Qt5_DIR: "C:\\Qt\\5.14\\msvc2017"
-  - image: Ubuntu2004
-    BUILD_COMBO: linux-gcc
-    Qt5_DIR: "$HOME/Qt/5.14"
-  - image: Ubuntu2004
-    BUILD_COMBO: linux-clang
-    Qt5_DIR: "$HOME/Qt/5.14"
+  exclude:
+    - image: Ubuntu2004
+      BUILD_COMBO: windows-mingw
+    - image: Ubuntu2004
+      BUILD_COMBO: windows-msvc
+    - image: Visual Studio 2019
+      BUILD_COMBO: linux-gcc
+    - image: Visual Studio 2019
+      BUILD_COMBO: linux-clang
 
 configuration:
   - Debug
