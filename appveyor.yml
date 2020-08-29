@@ -7,13 +7,13 @@ image:
 environment:
   matrix:
     - BUILD_COMBO: linux-gcc
-      Qt5_DIR: "$HOME/Qt/5.14/gcc_64"
+      CMAKE_PREFIX_PATH: "$HOME/Qt/5.14/gcc_64"
     - BUILD_COMBO: linux-clang
-      Qt5_DIR: "$HOME/Qt/5.14/clang_64"
+      CMAKE_PREFIX_PATH: "$HOME/Qt/5.14/clang_64"
     - BUILD_COMBO: windows-mingw
-      Qt5_DIR: "C:\\Qt\\5.14\\mingw73_64"
+      CMAKE_PREFIX_PATH: "C:\\Qt\\5.14\\mingw73_64"
     - BUILD_COMBO: windows-msvc
-      Qt5_DIR: "C:\\Qt\\5.14\\msvc2017"
+      CMAKE_PREFIX_PATH: "C:\\Qt\\5.14\\msvc2017"
 
 matrix:
   exclude:
