@@ -101,8 +101,13 @@ elseif ($isWindows) {
         exit 1
     }
 
-    if ($curConfig -eq 'Release') {       
-        & $windeployBin --release ./uc2.exe  
+    if ($curConfig -eq 'Release') {
+        if ($isMingwBuild) {
+            & $windeployBin ./uc2.exe  
+        }
+        else {
+            & $windeployBin --release ./uc2.exe  
+        }
     }
     else {       
         & $windeployBin ./uc2.exe  
