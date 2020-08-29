@@ -1,7 +1,7 @@
 version: 2.0.6-{build}
 
 image:
-  - Ubuntu2004
+  - Ubuntu1604
   - Visual Studio 2019
 
 environment:
@@ -17,9 +17,9 @@ environment:
 
 matrix:
   exclude:
-    - image: Ubuntu2004
+    - image: Ubuntu1604
       BUILD_COMBO: windows-mingw
-    - image: Ubuntu2004
+    - image: Ubuntu1604
       BUILD_COMBO: windows-msvc
     - image: Visual Studio 2019
       BUILD_COMBO: linux-gcc
