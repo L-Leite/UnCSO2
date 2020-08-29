@@ -35,7 +35,7 @@ install:
   - sh: export PATH="${PATH}:${QT_DIR}/bin"
 
 configuration:
-  - Debug
+  #- Debug
   - Release
 
 install:
