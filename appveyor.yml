@@ -14,10 +14,10 @@ environment:
 matrix:
   - image: Visual Studio 2019
     BUILD_COMBO: windows-mingw
-    Qt5_DIR: "C:\\Qt\\5.14"
+    Qt5_DIR: "C:\\Qt\\5.14\\mingw73_64"
   - image: Visual Studio 2019
     BUILD_COMBO: windows-msvc
-    Qt5_DIR: "C:\\Qt\\5.14"
+    Qt5_DIR: "C:\\Qt\\5.14\\msvc2017"
   - image: Ubuntu2004
     BUILD_COMBO: linux-gcc
     Qt5_DIR: "$HOME/Qt/5.14"
