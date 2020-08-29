@@ -30,15 +30,13 @@ matrix:
     - image: Visual Studio 2019
       BUILD_COMBO: linux-clang
 
-install:
-  - cmd: set PATH=%PATH%;%QT_DIR%\\bin
-  - sh: export PATH="${PATH}:${QT_DIR}/bin"
-
 configuration:
   #- Debug
   - Release
 
 install:
+  - cmd: set PATH=%PATH%;%QT_DIR%\\bin
+  - sh: export PATH="${PATH}:${QT_DIR}/bin"
   - ps: ./ci/setup.ps1
   #- sh: source /opt/qt512/bin/qt512-env.sh
 
