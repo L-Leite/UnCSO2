@@ -12,19 +12,18 @@ environment:
     - BUILD_COMBO: windows-msvc
 
 matrix:
-  exclude:
-    - image: Ubuntu2004
-      BUILD_COMBO: windows-mingw
-      Qt5_DIR: "C:\\Qt\\5.14"
-    - image: Ubuntu2004
-      BUILD_COMBO: windows-msvc
-      Qt5_DIR: "C:\\Qt\\5.14"
-    - image: Visual Studio 2019
-      BUILD_COMBO: linux-gcc
-      Qt5_DIR: "$HOME/Qt/5.14"
-    - image: Visual Studio 2019
-      BUILD_COMBO: linux-clang
-      Qt5_DIR: "$HOME/Qt/5.14"
+  - image: Visual Studio 2019
+    BUILD_COMBO: windows-mingw
+    Qt5_DIR: "C:\\Qt\\5.14"
+  - image: Visual Studio 2019
+    BUILD_COMBO: windows-msvc
+    Qt5_DIR: "C:\\Qt\\5.14"
+  - image: Ubuntu2004
+    BUILD_COMBO: linux-gcc
+    Qt5_DIR: "$HOME/Qt/5.14"
+  - image: Ubuntu2004
+    BUILD_COMBO: linux-clang
+    Qt5_DIR: "$HOME/Qt/5.14"
 
 configuration:
   - Debug
