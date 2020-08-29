@@ -8,12 +8,16 @@ environment:
   matrix:
     - BUILD_COMBO: linux-gcc
       CMAKE_PREFIX_PATH: "/home/appveyor/Qt/5.14/gcc_64"
+      QT_DIR: "/home/appveyor/Qt/5.14/gcc_64"
     - BUILD_COMBO: linux-clang
       CMAKE_PREFIX_PATH: "/home/appveyor/Qt/5.14/gcc_64"
+      QT_DIR: "/home/appveyor/Qt/5.14/gcc_64"
     - BUILD_COMBO: windows-mingw
       CMAKE_PREFIX_PATH: "C:\\Qt\\5.14\\mingw73_64"
+      QT_DIR: "C:\\Qt\\5.14\\mingw73_64"
     - BUILD_COMBO: windows-msvc
-      CMAKE_PREFIX_PATH: "C:\\Qt\\5.14\\msvc2017"
+      CMAKE_PREFIX_PATH: "C:\\Qt\\5.14\\msvc2017_64"
+      QT_DIR: "C:\\Qt\\5.14\\msvc2017_64"
 
 matrix:
   exclude:
@@ -25,6 +29,10 @@ matrix:
       BUILD_COMBO: linux-gcc
     - image: Visual Studio 2019
       BUILD_COMBO: linux-clang
+
+install:
+  - cmd: set PATH=%PATH%;%QT_DIR%\\bin
+  - sh: export PATH="${PATH}:${QT_DIR}/bin"
 
 configuration:
   - Debug
