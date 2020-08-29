@@ -79,7 +79,7 @@ if ($isLinux) {
     # sudo apt install -y ninja-build
 
     # install GL libs required by qt
-    # sudo apt install -y libgl1-mesa-dev mesa-common-dev
+    sudo apt install -y libgl1-mesa-dev mesa-common-dev
 
     # install qt
     # sudo add-apt-repository "ppa:beineri/opt-qt-5.12.3-xenial"

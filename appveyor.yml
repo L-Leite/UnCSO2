@@ -7,9 +7,9 @@ image:
 environment:
   matrix:
     - BUILD_COMBO: linux-gcc
-      CMAKE_PREFIX_PATH: "$HOME/Qt/5.14/gcc_64"
+      CMAKE_PREFIX_PATH: "/home/appveyor/Qt/5.14/gcc_64"
     - BUILD_COMBO: linux-clang
-      CMAKE_PREFIX_PATH: "$HOME/Qt/5.14/clang_64"
+      CMAKE_PREFIX_PATH: "/home/appveyor/Qt/5.14/gcc_64"
     - BUILD_COMBO: windows-mingw
       CMAKE_PREFIX_PATH: "C:\\Qt\\5.14\\mingw73_64"
     - BUILD_COMBO: windows-msvc
