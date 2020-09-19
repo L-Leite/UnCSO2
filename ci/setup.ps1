@@ -4,11 +4,11 @@ function SetupVsToolsPath {
     Push-Location 'C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build'
 
     cmd /c "vcvars64.bat&set" |
-        ForEach-Object {
-            if ($_ -match "=") {
-                $v = $_.split("="); set-item -force -path "ENV:\$($v[0])"  -value "$($v[1])"
-            }
+    ForEach-Object {
+        if ($_ -match "=") {
+            $v = $_.split("="); set-item -force -path "ENV:\$($v[0])"  -value "$($v[1])"
         }
+    }
 
     Pop-Location
 }
@@ -75,6 +75,9 @@ Write-Host "Running setup script..."
 Write-Host "Current setup build combo is: $curBuildCombo"
 
 if ($isLinux) {
+    # update apt before installing anything
+    sudo apt update
+
     # install ninja through apt
     # sudo apt install -y ninja-build
 
