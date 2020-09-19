@@ -30,9 +30,7 @@ matrix:
     - image: Visual Studio 2019
       BUILD_COMBO: linux-clang
 
-configuration:
-  - Debug
-  - Release
+configuration: Release
 
 install:
   - cmd: set PATH=%PATH%;%QT_DIR%\\bin
@@ -65,7 +63,6 @@ deploy:
   artifact: mingw_binaries,gcc_binaries
   on:
     APPVEYOR_REPO_TAG: true
-    configuration: Release
 
 # on_finish:
 #  - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
