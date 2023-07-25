@@ -202,7 +202,7 @@
               <item>
                <widget class="QLabel" name="label">
                 <property name="text">
-                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-family:'Hack';&quot;&gt;UnCSO2&lt;/span&gt; was tested agaisnt Counter-Strike: Online 2 copies from the following regions:&lt;/p&gt;&lt;p&gt;Korea, China, Taiwan and Japan.&lt;/p&gt;&lt;p&gt;It was also tested agaisnt Korea's Titanfall Online.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-family:'Hack';&quot;&gt;UnCSO2&lt;/span&gt; was tested against Counter-Strike: Online 2 copies from the following regions:&lt;/p&gt;&lt;p&gt;Korea, China, Taiwan and Japan.&lt;/p&gt;&lt;p&gt;It was also tested against Korea's Titanfall Online.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                 </property>
                 <property name="textFormat">
                  <enum>Qt::RichText</enum>
